@@ -28,7 +28,7 @@
     </bean>
     <!-- 配置扫描包，加载mapper代理对象 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 逆向工程生成的文件会在这个包下 -->
-        <property name="basePackage" value="lab.ipl.restapi.mapper"></property>
+        <!-- 逆向工程生成的文件包路径 -->
+        <property name="basePackage" value="ipl.manager.mapper"></property>
     </bean>
 </beans>

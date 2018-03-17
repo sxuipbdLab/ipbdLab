@@ -48,6 +48,6 @@
     <!-- 切面，通过AOP配置提供事物增强（所有标记了@transactional的类） -->
     <aop:config>
         <aop:advisor advice-ref="txAdvice"
-                     pointcut="execution(* lab.ipl.restapi.service.*.*(..))"/>
+                     pointcut="execution(* ipl.restapi.service.*.*(..))"/>
     </aop:config>
 </beans>

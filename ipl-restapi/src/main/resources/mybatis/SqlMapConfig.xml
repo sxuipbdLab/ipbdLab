@@ -7,10 +7,6 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <!-- mybatis的全局配置文件可参考：http://blog.csdn.net/hoho_12/article/details/52625992 -->
 <configuration>
-    <!--配置映射器路径，指向mapper.xml-->
-    <!--<mappers>
-        &lt;!&ndash;<mapper resource="mybatis/UserMapper.xml"/>&ndash;&gt;
-    </mappers>-->
     <!-- 配置分页插件 -->
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageHelper">
@@ -18,4 +14,8 @@
             <property name="dialect" value="mysql"/>
         </plugin>
     </plugins>
+    <!--配置映射器路径，指向mapper.xml-->
+    <mappers>
+        <!--<mapper resource="mybatis/UserMapper.xml"/>-->
+    </mappers>
 </configuration>
