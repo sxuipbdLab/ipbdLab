@@ -15,8 +15,5 @@
     <!-- 扫描controller包，应用Spring注解 -->
     <context:component-scan base-package="ipl.restapi.controller"/>
     <mvc:annotation-driven />
-    <!-- 不需要视图解析器 -->
-    <!-- 不需要资源映射 -->
-
 
 </beans>
