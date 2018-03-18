@@ -8,6 +8,6 @@
     <!-- 扫描包加载注入Service下所有的实现类，这样一来，那些定义的Spring注解才能起作用
      （不要全局扫描，@controller,@service,@Responsitory,@component
      子容器可以扫描父容器对象）-->
-    <context:component-scan base-package="ipl.manager.service"></context:component-scan>
+    <context:component-scan base-package="ipl.sso.service"></context:component-scan>
     <!-- service中有关事务的配置，在Spring-trans.xml中 -->
 </beans>
