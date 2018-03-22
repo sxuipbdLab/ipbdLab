@@ -1,6 +1,6 @@
 package ipl.restapi.service;
 
-import ipl.manager.pojo.Users;
+import ipl.manager.pojo.UserInfo;
 
 /**
  * <p>Descirption:</p>
@@ -13,10 +13,10 @@ import ipl.manager.pojo.Users;
  */
 public interface UsersService {
     /**
-     * 通过user_id查询User所有数据的接口
+     * 通过用户id查询User所有数据的接口
      *
      * @param userId 用户id
      * @return 用户
      */
-    Users getUserById(long userId);
+    UserInfo getUserById(long userId);
 }

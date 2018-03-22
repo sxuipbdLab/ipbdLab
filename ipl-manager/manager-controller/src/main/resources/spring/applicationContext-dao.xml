@@ -17,7 +17,7 @@
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           destroy-method="close">
         <property name="url" value="${url}"/>
-        <property name="username" value="${username}"/>
+        <property name="username" value="admin"/>
         <property name="password" value="${password}"/>
         <property name="driverClassName" value="${driver}"/>
         <property name="maxActive" value="${maxActive}"/>

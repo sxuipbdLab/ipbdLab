@@ -1,7 +1,7 @@
 package ipl.restapi.service.impl;
 
-import ipl.manager.mapper.UsersMapper;
-import ipl.manager.pojo.Users;
+import ipl.manager.mapper.UserInfoMapper;
+import ipl.manager.pojo.UserInfo;
 import ipl.restapi.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Service;
 public class UsersServiceImpl implements UsersService {
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    private UsersMapper usersMapper;
+    private UserInfoMapper userInfoMapper;
 
     @Override
     // 这里的itemId参数看起来是“死”的，实际在controller中，使用@RequestMapping以及@PathVariable“转活”
-    public Users getUserById(long userId) {
+    public UserInfo getUserById(long userId) {
 //        UsersExample usersExample = new UsersExample();
-        Users user = usersMapper.selectByPrimaryKey(userId);
-        return user;
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
+        return userInfo;
     }
 
 }
