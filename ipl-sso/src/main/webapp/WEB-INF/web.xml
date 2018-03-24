@@ -43,7 +43,7 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath:springmvc/spring-mvc.xml</param-value>
         </init-param>
-        <load-on-startup>2</load-on-startup>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <!-- Spring MVC处理的URL，这里为所有请求 -->
     <servlet-mapping>

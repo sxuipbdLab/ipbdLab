@@ -1,11 +1,8 @@
 package ipl.common.utils;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 /**
  * <p>Descirption:</p>
@@ -28,16 +25,13 @@ public class JacksonUtil {
      * @throws IOException
      */
     public static String bean2Json(Object obj) {
-        StringWriter sw = null;
         try {
-            sw = new StringWriter();
-            JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
-            MAPPER.writeValue(gen, obj);
-            gen.close();
+            String string = MAPPER.writeValueAsString(obj);
+            return string;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sw.toString();
+        return null;
     }
 
     /**

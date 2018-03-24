@@ -36,6 +36,5 @@ public class UserController {
         String userJson = JacksonUtil.bean2Json(user);
         return userJson;
     }
-
 }
 
