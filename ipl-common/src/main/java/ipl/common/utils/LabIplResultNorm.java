@@ -23,44 +23,25 @@ public class LabIplResultNorm {
     /**
      * 响应中的数据
      */
-//    private HashMap<String, String> backinfo = new HashMap<>();
-    private String backinfo;
-
-    public static LabIplResultNorm build(String status, String msg, String backinfo) {
-        return new LabIplResultNorm(status, msg, backinfo);
-    }
-
-    public static LabIplResultNorm build(String status, String msg) {
-        return new LabIplResultNorm(status, msg, null);
-    }
+    private Boolean backinfo;
 
     /**
-     * 请求成功时（200）
-     *
-     * @param backinfo false代表被验证的数据不可使用，等，true代表被验证的数据可以使用，等。
-     * @return
+     *   请求数据
      */
-    public static LabIplResultNorm ok(String backinfo) {
-        return new LabIplResultNorm(backinfo);
-    }
+    private String data;
 
-    public static LabIplResultNorm ok() {
-        return new LabIplResultNorm(null);
+    public static LabIplResultNorm build(String status, String msg, Boolean backinfo, String data) {
+        return new LabIplResultNorm(status, msg, backinfo, data);
     }
 
     public LabIplResultNorm() {
     }
 
-    public LabIplResultNorm(String backinfo) {
-        this.status = "200";
-        this.msg = "OK";
-        this.backinfo = backinfo;
-    }
-
-    public LabIplResultNorm(String status, String msg, String backinfo) {
+    public LabIplResultNorm(String status, String msg, Boolean backinfo, String data) {
         this.status = status;
         this.msg = msg;
         this.backinfo = backinfo;
+        this.data = data;
     }
 
     public String getMsg() {
@@ -69,5 +50,29 @@ public class LabIplResultNorm {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Boolean getBackinfo() {
+        return backinfo;
+    }
+
+    public void setBackinfo(Boolean backinfo) {
+        this.backinfo = backinfo;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return this.data;
     }
 }

@@ -1,5 +1,6 @@
 package ipl.sso.service.impl;
 
+import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.LabIplResultNorm;
 import ipl.manager.mapper.UserInfoMapper;
 import ipl.manager.pojo.UserInfo;
@@ -35,8 +36,12 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public LabIplResultNorm userLogin(String email, String password, HttpServletRequest resuest, HttpServletResponse response) {
+    public String userLogin(String email, String password, HttpServletRequest resuest, HttpServletResponse response) {
 
+        if(email == null || password == null){
+            LOGGER.info("缺少信息{}", email);
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("400", "必须提供用户邮箱和密码", false, null));
+        }
         UserInfoExample userInfoExample = new UserInfoExample();
         UserInfoExample.Criteria criteria = userInfoExample.createCriteria();
         criteria.andEmailEqualTo(email);
@@ -44,7 +49,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         List<UserInfo> list = userInfoMapper.selectByExample(userInfoExample);
         if (list.size() != 1 || list == null) {
             LOGGER.info("没有用户，{}", email);
-            return LabIplResultNorm.build("400", "查询数据库无此用户", "false");
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("400", "查询数据库无此用户", false, null));
         }
         UserInfo user = list.get(0);
         user.setLastLoginTime(user.getLoginTime());
@@ -52,18 +57,19 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         String time = sdf.format(new Date());*/
         user.setLoginTime(new Date());
         user.setLoginCount(user.getLoginCount() + 1);
-        // 接下来验证密码。md5算法。
-        if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getPassword())) {
+        // 接下来验证密码。md5算法。!DigestUtils.md5DigestAsHex(password.getBytes())
+        if (password.equals(user.getPassword())) {
+            System.out.println("=======" + user.getPassword());
             LOGGER.info("用户，{}，密码不正确", email);
-            return LabIplResultNorm.build("400", "用户密码不正确", "false");
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("400", "用户密码不正确", false, null));
         }
         //保存用户之前，把用户对象中的密码清空。
         user.setPassword(null);
-        return LabIplResultNorm.ok("true");
+        return JacksonUtil.bean2Json(LabIplResultNorm.build("200", "登录成功", true , null));
     }
 
     @Override
-    public LabIplResultNorm createUser(UserInfo user) {
+    public String createUser(UserInfo user) {
 //        设置注册时间
         user.setRegistTime(new Date());
 //        设置本次登录时间
@@ -78,8 +84,8 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
             userInfoMapper.insert(user);
         } catch (Exception e) {
             e.printStackTrace();
-            return LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString());
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString(), false, null));
         }
-        return LabIplResultNorm.ok("successful");
+        return JacksonUtil.bean2Json(LabIplResultNorm.build("200", "创建成功", true, null));
     }
 }

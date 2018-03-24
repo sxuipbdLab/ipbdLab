@@ -21,7 +21,7 @@ public class SSOToken {
 
     /**
      * @param playLoadHelper 自定义的playload对象
-     * @param maxAge         token可用时间
+     * @param    expirdate      token可用时间
      * @param <T>
      * @return
      */

@@ -3,6 +3,7 @@ package ipl.common.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * <p>Descirption:</p>
@@ -27,6 +28,23 @@ public class JacksonUtil {
     public static String bean2Json(Object obj) {
         try {
             String string = MAPPER.writeValueAsString(obj);
+            return string;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     *
+     * 将map对象转换成json字符串
+     * @param map 需要转换的对象
+     * @return 该map对象对应的Json格式数据
+     * @throws IOException
+     */
+    public static String MapToJson(Map<String, Object> map) {
+        try {
+            String string = MAPPER.writeValueAsString(map);
             return string;
         } catch (IOException e) {
             e.printStackTrace();

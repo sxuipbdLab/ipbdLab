@@ -1,5 +1,6 @@
 package ipl.sso.service.impl;
 
+import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.LabIplResultNorm;
 import ipl.manager.mapper.UserInfoMapper;
 import ipl.manager.pojo.UserInfo;
@@ -32,7 +33,7 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
     public static final Logger LOGGER = LoggerFactory.getLogger(UserValidatServiceImpl.class);
 
     @Override
-    public LabIplResultNorm validateUserInfo(String validateValue, int type) {
+    public String validateUserInfo(String validateValue, int type) {
         //创建查询条件
         UserInfoExample example = new UserInfoExample();
         UserInfoExample.Criteria criteria = example.createCriteria();
@@ -61,13 +62,12 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
             // 数据可用，返回"true"
             /*hashMap.put("验证数据：",validateValue);
             hashMap.put("tureOr"false"","true");*/
-            return LabIplResultNorm.ok("true");
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("200",msg +validateValue + "可用",true,null));
         } else {
             LOGGER.info("出现405请求");
             // 数据不可用【405 (SC_METHOD_NOT_ALLOWED)指出请求方法(GET, POST, HEAD, PUT, DELETE, 等)对某些特定的资源不允许使用。该状态码是新加入 HTTP 1.1中的。】
-            LabIplResultNorm labIplResultNorm = LabIplResultNorm.build("405", "", "false");
-            labIplResultNorm.setMsg(msg + validateValue + "已经存在");
-            return labIplResultNorm;
+            LabIplResultNorm labIplResultNorm = LabIplResultNorm.build("405", msg + validateValue + "已经存在", false, null);
+            return JacksonUtil.bean2Json(labIplResultNorm);
         }
     }
 }
