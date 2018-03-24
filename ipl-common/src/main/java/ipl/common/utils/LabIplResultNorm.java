@@ -21,26 +21,32 @@ public class LabIplResultNorm {
     private String msg;
 
     /**
-     * 响应中的数据
+     *  前端是否有必要读取msg中的数据
      */
-    private Boolean backinfo;
+    private Boolean ifmsg;
 
     /**
-     *   请求数据
+     *   前端请求的数据
      */
     private String data;
 
-    public static LabIplResultNorm build(String status, String msg, Boolean backinfo, String data) {
-        return new LabIplResultNorm(status, msg, backinfo, data);
+    /**
+     *  前后端type相同，用于前端验证哪个接口返回数据了
+     */
+    private String type;
+
+    public static LabIplResultNorm build(String status, String msg, Boolean ifmsg, String type, String data) {
+        return new LabIplResultNorm(status, msg, ifmsg, type, data);
     }
 
     public LabIplResultNorm() {
     }
 
-    public LabIplResultNorm(String status, String msg, Boolean backinfo, String data) {
+    public LabIplResultNorm(String status, String msg, Boolean ifmsg, String type, String data) {
         this.status = status;
         this.msg = msg;
-        this.backinfo = backinfo;
+        this.ifmsg = ifmsg;
+        this.type = type;
         this.data = data;
     }
 
@@ -60,12 +66,12 @@ public class LabIplResultNorm {
         this.status = status;
     }
 
-    public Boolean getBackinfo() {
-        return backinfo;
+    public Boolean getIfmsg() {
+        return ifmsg;
     }
 
-    public void setBackinfo(Boolean backinfo) {
-        this.backinfo = backinfo;
+    public void setIfmsg(Boolean ifmsg) {
+        this.ifmsg = ifmsg;
     }
 
     public void setData(String data) {
@@ -74,5 +80,13 @@ public class LabIplResultNorm {
 
     public String getData() {
         return this.data;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
