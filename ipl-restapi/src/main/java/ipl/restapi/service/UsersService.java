@@ -19,4 +19,17 @@ public interface UsersService {
      * @return 用户
      */
     UserInfo getUserById(long userId);
+
+    /**
+     * 所有角色升一级
+     * @param identity
+     */
+    void updateIndentityByIndentityUP(Short identity);
+
+    /**
+     * 所有角色降一级
+     * @param identity
+     */
+    void updateIndentityByIndentityDOWN(Short identity);
+
 }

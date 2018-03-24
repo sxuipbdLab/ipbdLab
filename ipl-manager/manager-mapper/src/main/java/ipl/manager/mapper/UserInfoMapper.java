@@ -94,4 +94,8 @@ public interface UserInfoMapper {
      * @mbg.generated Thu Mar 22 15:04:16 CST 2018
      */
     int updateByPrimaryKey(UserInfo record);
+
+    void updateIdentityByIdentityUP(Short identity);
+
+    void updateIdentityByIdentityDOWN(Short identity);
 }
