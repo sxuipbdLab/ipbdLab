@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>Descirption:</p>
@@ -33,7 +30,7 @@ public class UserValidatController {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private UserValidatService userValidatService;
 
-    @RequestMapping(value = "/v1/checkinfo", produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/v1/checkinfo", produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"},method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public String checkData(@RequestParam(value = "checkvalue") String param, @RequestParam(value = "type") Integer type) {
 // @RequestParam 是从request里面拿取值，而 @PathVariable 是从一个URI模板里面来填充

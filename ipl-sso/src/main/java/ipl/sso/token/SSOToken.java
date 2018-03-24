@@ -36,7 +36,7 @@ public class SSOToken {
                     .withIssuer(playLoadHelper.getIss())
                     .withIssuedAt(playLoadHelper.getIat())
                     .withSubject(playLoadHelper.getSub())
-                    .withClaim("username", playLoadHelper.getemail())
+                    .withClaim("username", playLoadHelper.getUsername())
                     .withExpiresAt(date)
                     .sign(Algorithm.HMAC256(SECRET));
             return token;

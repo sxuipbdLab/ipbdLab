@@ -21,9 +21,9 @@ public class PlayLoadHelper {
      */
     private String sub;
     /**
-     * email可以暴露
+     * username可以暴露
      */
-    private String email;
+    private String username;
     /**
      * 创建token的时间
      */
@@ -32,10 +32,10 @@ public class PlayLoadHelper {
     public PlayLoadHelper() {
     }
 
-    public PlayLoadHelper(String issuser, String subject, String email, Date createDate) {
+    public PlayLoadHelper(String issuser, String subject, String username, Date createDate) {
         this.iss = issuser;
         this.sub = subject;
-        this.email = email;
+        this.username = username;
         this.iat = createDate;
     }
 
@@ -47,12 +47,12 @@ public class PlayLoadHelper {
         this.iat = iat;
     }
 
-    public String getemail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setemail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getIss() {

@@ -8,9 +8,9 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since api1.0
  */
 @Controller
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserLoginRegistController {
     @Autowired
     private UserLoginRegistService userService;
@@ -33,12 +34,8 @@ public class UserLoginRegistController {
     // 用户登录[不允许GET方法]
     @RequestMapping(value = "/v1/login", method = {RequestMethod.POST, RequestMethod.GET}, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public String userLogin(
-            @RequestParam(value = "email") String email,
-            @RequestParam(value = "password") String password,
-            HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("=============> 接受到：" + email + ", " + password);
-
+    public String userLogin(String email, String password,
+                            HttpServletRequest request, HttpServletResponse response) {
         try {
             String result = userService.userLogin(email, password, request, response);
             return result;
