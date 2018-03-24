@@ -1,13 +1,16 @@
 package ipl.sso.controller;
 
+import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.LabIplResultNorm;
 import ipl.manager.pojo.UserInfo;
 import ipl.sso.service.UserLoginRegistService;
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,35 +27,39 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class UserLoginRegistController {
-
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private UserLoginRegistService userService;
 
-    //用户登录[不允许GET方法]
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    // 用户登录[不允许GET方法]
+    @RequestMapping(value = "/v1/login", method = {RequestMethod.POST, RequestMethod.GET}, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public LabIplResultNorm userLogin(String username, String password,
-                                      HttpServletRequest request, HttpServletResponse response) {
+    public String userLogin(
+            @RequestParam(value = "email") String email,
+            @RequestParam(value = "password") String password,
+            HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("=============> 接受到：" + email + ", " + password);
+
         try {
-            LabIplResultNorm result = userService.userLogin(username, password, request, response);
+            String result = userService.userLogin(email, password, request, response);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString());
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString(), false, null));
         }
     }
 
-    //用户注册[不允许GET方法]
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    // 用户注册[不允许GET方法]
+    @RequestMapping(value = "/v1/register", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public LabIplResultNorm createUser(UserInfo user) {
+    public String createUser(UserInfo user) {
+        System.out.println("接收到：\n" + JacksonUtil.bean2Json(user));
+
         try {
-            LabIplResultNorm result = userService.createUser(user);
+            String result = userService.createUser(user);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString());
+            return JacksonUtil.bean2Json(LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString(), false, null));
         }
     }
 }

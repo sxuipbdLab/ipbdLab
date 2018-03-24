@@ -1,7 +1,5 @@
 package ipl.sso.service;
 
-import ipl.common.utils.LabIplResultNorm;
-
 /**
  * <p>Descirption: 注册时的用户信息验证接口</p>
  *
@@ -12,6 +10,6 @@ import ipl.common.utils.LabIplResultNorm;
  * @since api1.0
  */
 public interface UserValidatService {
-    LabIplResultNorm validateUserInfo(String validateValue, int type);
+    String validateUserInfo(String validateValue, int type);
 
 }
