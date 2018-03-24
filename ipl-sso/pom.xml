@@ -49,14 +49,6 @@
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
         </dependency>
-        <!-- kisso begin -->
-        <!--        <dependency>
-                    <groupId>com.baomidou</groupId>
-                    <artifactId>kisso</artifactId>
-                    <version>3.7.0</version>
-                </dependency>-->
-        <!-- kisso end -->
-        <!-- jwt begin -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
