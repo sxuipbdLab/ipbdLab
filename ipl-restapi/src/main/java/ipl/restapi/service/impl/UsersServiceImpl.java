@@ -29,4 +29,22 @@ public class UsersServiceImpl implements UsersService {
         return userInfo;
     }
 
+    /**
+     * 所有角色升一级
+     * @param indentity 传入原来角色的ID
+     */
+    @Override
+    public void updateIndentityByIndentityUP(Short indentity){
+        userInfoMapper.updateIdentityByIdentityUP(indentity);
+    }
+
+    /**
+     * 所有角色降一级
+     * @param indentity 传入原来角色的ID
+     */
+    @Override
+    public void updateIndentityByIndentityDOWN(Short indentity){
+        userInfoMapper.updateIdentityByIdentityDOWN(indentity);
+    }
+
 }
