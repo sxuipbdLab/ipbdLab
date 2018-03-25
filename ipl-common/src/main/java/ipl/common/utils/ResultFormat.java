@@ -9,7 +9,7 @@ package ipl.common.utils;
  * @date 2018/3/20 11:10
  * @since api1.0
  */
-public class LabIplResultNorm {
+public class ResultFormat {
     /**
      * 响应业务状态
      */
@@ -35,14 +35,14 @@ public class LabIplResultNorm {
      */
     private String type;
 
-    public static LabIplResultNorm build(String status, String msg, Boolean ifmsg, String type, String data) {
-        return new LabIplResultNorm(status, msg, ifmsg, type, data);
+    public static ResultFormat build(String status, String msg, Boolean ifmsg, String type, String data) {
+        return new ResultFormat(status, msg, ifmsg, type, data);
     }
 
-    public LabIplResultNorm() {
+    public ResultFormat() {
     }
 
-    public LabIplResultNorm(String status, String msg, Boolean ifmsg, String type, String data) {
+    public ResultFormat(String status, String msg, Boolean ifmsg, String type, String data) {
         this.status = status;
         this.msg = msg;
         this.ifmsg = ifmsg;

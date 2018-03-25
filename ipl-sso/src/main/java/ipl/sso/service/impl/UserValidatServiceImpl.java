@@ -1,7 +1,7 @@
 package ipl.sso.service.impl;
 
 import ipl.common.utils.JacksonUtil;
-import ipl.common.utils.LabIplResultNorm;
+import ipl.common.utils.ResultFormat;
 import ipl.manager.mapper.UserInfoMapper;
 import ipl.manager.pojo.UserInfo;
 import ipl.manager.pojo.UserInfoExample;
@@ -37,7 +37,7 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
         //创建查询条件
         UserInfoExample example = new UserInfoExample();
         UserInfoExample.Criteria criteria = example.createCriteria();
-        //对数据进行校验：1、2、3分别代表user_name、phone、email
+        //对数据进行校验：1、3分别代表username、email
 
         String msg = null;
         //用户名校验
@@ -59,15 +59,11 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
 
         List<UserInfo> list = userInfoMapper.selectByExample(example);
         if (list == null || list.size() == 0) {
-            // 数据可用，返回"true"
-            /*hashMap.put("验证数据：",validateValue);
-            hashMap.put("tureOr"false"","true");*/
-            return JacksonUtil.bean2Json(LabIplResultNorm.build("200",msg +validateValue + "可用",true,null));
+            return JacksonUtil.bean2Json(ResultFormat.build("104", msg + validateValue + "可用", false, "check", null));
         } else {
-            LOGGER.info("出现405请求");
+            LOGGER.info(msg + validateValue + "已经存在");
             // 数据不可用【405 (SC_METHOD_NOT_ALLOWED)指出请求方法(GET, POST, HEAD, PUT, DELETE, 等)对某些特定的资源不允许使用。该状态码是新加入 HTTP 1.1中的。】
-            LabIplResultNorm labIplResultNorm = LabIplResultNorm.build("405", msg + validateValue + "已经存在", false, null);
-            return JacksonUtil.bean2Json(labIplResultNorm);
+            return JacksonUtil.bean2Json(ResultFormat.build("105", msg + validateValue + "已被使用", true, "check", null));
         }
     }
 }

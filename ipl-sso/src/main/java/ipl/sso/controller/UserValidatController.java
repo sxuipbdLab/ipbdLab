@@ -1,11 +1,10 @@
 package ipl.sso.controller;
 
 import ipl.common.utils.JacksonUtil;
-import ipl.common.utils.LabIplResultNorm;
+import ipl.common.utils.ResultFormat;
 import ipl.sso.service.UserValidatService;
 import ipl.sso.service.enums.ValidateEnum;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.reflection.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class UserValidatController {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private UserValidatService userValidatService;
 
-    @RequestMapping(value = "/v1/checkinfo", produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"},method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/checkinfo", produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String checkData(@RequestParam(value = "checkvalue") String param, @RequestParam(value = "type") Integer type) {
 // @RequestParam 是从request里面拿取值，而 @PathVariable 是从一个URI模板里面来填充
@@ -38,11 +37,11 @@ public class UserValidatController {
 
         //参数有效性校验
         if (StringUtils.isBlank(param) || type == null) {
-            result = JacksonUtil.bean2Json(LabIplResultNorm.build("400", "校验内容不能为空", false, null));
+            result = JacksonUtil.bean2Json(ResultFormat.build("105", "校验值不能为空", true, "check", null));
         }
         // 暂时去掉： type != ValidateEnum.USER_PHONE.getType() &&
         if (type != ValidateEnum.USER_NAME.getType() && type != ValidateEnum.USER_EMAIL.getType()) {
-            result = JacksonUtil.bean2Json(LabIplResultNorm.build("400", "校验内容类型错误,1_username;3_email", false, null));
+            result = JacksonUtil.bean2Json(ResultFormat.build("105", "校验值的类型错误,1-username;3-email", true, "check", null));
         }
         // 如果此时result中就已经有值，那么校验出错,不再调用服务。
         if (null != result) {
@@ -54,7 +53,7 @@ public class UserValidatController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            result = JacksonUtil.bean2Json(LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString(), false, null));
+            result = JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", true, "check", null));
         }
         return result;
     }

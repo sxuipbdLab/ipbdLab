@@ -1,10 +1,9 @@
 package ipl.sso.controller;
 
 import ipl.common.utils.JacksonUtil;
-import ipl.common.utils.LabIplResultNorm;
+import ipl.common.utils.ResultFormat;
 import ipl.manager.pojo.UserInfo;
 import ipl.sso.service.UserLoginRegistService;
-import org.apache.ibatis.reflection.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,7 +31,7 @@ public class UserLoginRegistController {
     private UserLoginRegistService userService;
 
     // 用户登录[不允许GET方法]
-    @RequestMapping(value = "/v1/login", method = {RequestMethod.POST, RequestMethod.GET}, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String userLogin(String email, String password,
                             HttpServletRequest request, HttpServletResponse response) {
@@ -41,12 +40,12 @@ public class UserLoginRegistController {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return JacksonUtil.bean2Json(LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString(), false, null));
+            return JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", true, "login", null));
         }
     }
 
     // 用户注册[不允许GET方法]
-    @RequestMapping(value = "/v1/register", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String createUser(UserInfo user) {
         System.out.println("接收到：\n" + JacksonUtil.bean2Json(user));
@@ -56,7 +55,7 @@ public class UserLoginRegistController {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return JacksonUtil.bean2Json(LabIplResultNorm.build("500", ExceptionUtil.unwrapThrowable(e).toString(), false, null));
+            return JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", true, "register", null));
         }
     }
 }
