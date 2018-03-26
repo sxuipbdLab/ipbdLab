@@ -5,8 +5,8 @@ import ipl.common.utils.ResultFormat;
 import ipl.manager.mapper.UserInfoMapper;
 import ipl.manager.pojo.UserInfo;
 import ipl.manager.pojo.UserInfoExample;
+import ipl.sso.enums.UserValidatiEnum;
 import ipl.sso.service.UserValidatService;
-import ipl.sso.service.enums.ValidateEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,20 +41,20 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
 
         String msg = null;
         //用户名校验
-        if (type == ValidateEnum.USER_NAME.getType()) {
+        if (type == UserValidatiEnum.USER_NAME.getType()) {
             criteria.andUsernameEqualTo(validateValue);
             LOGGER.info("验证用户名===== {}", validateValue);
-            msg = ValidateEnum.USER_NAME.getDesc();
+            msg = UserValidatiEnum.USER_NAME.getDesc();
         }
-        /*else if (type == ValidateEnum.USER_PHONE.getType()){
+        /*else if (type == UserValidatiEnum.USER_PHONE.getType()){
             criteria.andPhoneEqualTo(validateValue);
             LOGGER.info("验证手机号=====" + validateValue);
-            msg = ValidateEnum.USER_PHONE.getDesc();
+            msg = UserValidatiEnum.USER_PHONE.getDesc();
         }*/
-        else if (type == ValidateEnum.USER_EMAIL.getType()) {
+        else if (type == UserValidatiEnum.USER_EMAIL.getType()) {
             criteria.andEmailEqualTo(validateValue);
             LOGGER.info("验证邮箱=====" + validateValue);
-            msg = ValidateEnum.USER_EMAIL.getDesc();
+            msg = UserValidatiEnum.USER_EMAIL.getDesc();
         }
 
         List<UserInfo> list = userInfoMapper.selectByExample(example);

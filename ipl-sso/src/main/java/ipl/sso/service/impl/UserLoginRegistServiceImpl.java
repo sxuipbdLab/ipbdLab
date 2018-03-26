@@ -1,5 +1,7 @@
 package ipl.sso.service.impl;
 
+import ipl.common.token.JWTManager;
+import ipl.common.token.PlayLoadHelper;
 import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.ResultFormat;
 import ipl.manager.mapper.UserInfoMapper;
@@ -12,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
 /**
- * <p>Descirption:</p>
+ * <p>Descirption:用户登录以及token，用户注册的实现</p>
  *
  * @author 王海
  * @version V1.0
@@ -35,9 +37,9 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public String userLogin(String email, String password, HttpServletRequest resuest, HttpServletResponse response) {
+    public String userLogin(String email, String password, HttpServletResponse response) {
         // 此情况几乎不可能出现，所以没写入API接口文档
-        if(email == null || password == null){
+        if (email == null || password == null) {
             LOGGER.info("缺少信息{}", email);
             return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，必须提供用户邮箱和密码", true, "login", null));
         }
@@ -46,7 +48,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         criteria.andEmailEqualTo(email);
 
         List<UserInfo> list = userInfoMapper.selectByExample(userInfoExample);
-        if (list.size() != 1 ) {
+        if (list.size() != 1) {
             System.out.println("邮箱参数=======：" + email);
             LOGGER.info("没有邮箱为：{}的用户", email);
             return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，无此邮箱", true, "login", null));
@@ -64,14 +66,22 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         user.setLoginCount(user.getLoginCount() + 1);
         // 把用户对象中的密码清空。
         user.setPassword(null);
-//        String token = SSOToken.createToken()
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "登录成功", false , "login", null));
+
+        // 生成token并用cookie携带
+        PlayLoadHelper playLoadHelper = new PlayLoadHelper(new Date(), email);
+        String token = JWTManager.createToken(playLoadHelper, 90000);
+        System.out.println("response中的token=======" + token);
+//        response.addHeader("Set-Cookie", "uid=112; Path=/; HttpOnly");
+        Cookie cookie = new Cookie("access_token", token);
+        response.addCookie(cookie);
+
+        return JacksonUtil.bean2Json(ResultFormat.build("100", "登录成功", false, "login", token));
     }
 
     @Override
     public String createUser(UserInfo user) {
         // 此情况几乎不可能出现，所以没写入API接口文档
-        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null){
+        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
             return JacksonUtil.bean2Json(ResultFormat.build("400", "username,email,password没有完整提供", true, "create", null));
         }
 //        设置注册时间

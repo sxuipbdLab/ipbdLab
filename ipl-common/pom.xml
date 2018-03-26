@@ -65,6 +65,20 @@
             <artifactId>javax.servlet.jsp-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!-- jwt begin -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!-- jwt end -->
     </dependencies>
 
 </project>

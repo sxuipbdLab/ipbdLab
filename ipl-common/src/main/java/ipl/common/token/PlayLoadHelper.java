@@ -1,4 +1,4 @@
-package ipl.sso.token;
+package ipl.common.token;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author 王海
  * @version V1.0
- * @package ipl.sso.token
+ * @package ipl.common.token
  * @date 2018/3/23 10:19
  * @since api1.0
  */
@@ -17,13 +17,9 @@ public class PlayLoadHelper {
      */
     private String iss;
     /**
-     * 主题
+     * 用户是谁(useremail可以暴露)
      */
     private String sub;
-    /**
-     * username可以暴露
-     */
-    private String username;
     /**
      * 创建token的时间
      */
@@ -32,11 +28,14 @@ public class PlayLoadHelper {
     public PlayLoadHelper() {
     }
 
-    public PlayLoadHelper(String issuser, String subject, String username, Date createDate) {
-        this.iss = issuser;
-        this.sub = subject;
-        this.username = username;
+    public PlayLoadHelper(Date createDate, String uemail) {
+        this.iss = "labipl/sso";
+        this.sub = uemail;
         this.iat = createDate;
+    }
+
+    public static PlayLoadHelper build(Date datenow, String uemail) {
+        return new PlayLoadHelper(datenow, uemail);
     }
 
     public Date getIat() {
@@ -45,14 +44,6 @@ public class PlayLoadHelper {
 
     public void setIat(Date iat) {
         this.iat = iat;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getIss() {

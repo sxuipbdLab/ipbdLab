@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -33,10 +32,9 @@ public class UserLoginRegistController {
     // 用户登录[不允许GET方法]
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public String userLogin(String email, String password,
-                            HttpServletRequest request, HttpServletResponse response) {
+    public String userLogin(String email, String password, HttpServletResponse response) {
         try {
-            String result = userService.userLogin(email, password, request, response);
+            String result = userService.userLogin(email, password, response);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
