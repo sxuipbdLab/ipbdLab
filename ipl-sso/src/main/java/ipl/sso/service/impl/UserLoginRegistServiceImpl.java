@@ -65,7 +65,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         user.setLoginTime(new Date());
         user.setLoginCount(user.getLoginCount() + 1);
         userInfoMapper.loginUpdate(user);
-        LOGGER.info("用户，{}第==={}次登录",user.getLoginCount());
+        LOGGER.info("用户\t{}第\t{}次登录",email,user.getLoginCount());
         // 把用户对象中的密码清空。
         user.setPassword(null);
 
