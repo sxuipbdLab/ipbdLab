@@ -149,6 +149,7 @@ public class JWTManager {
         } catch (SignatureException e) {
             resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.NO_TRUST.getErrorCode(), TokenValidatiEnum.NO_TRUST.getDesc(), true, "后台对每次请求进行token验证", null));
         } catch (Exception e) {
+
             resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.OTHER_ERRORE.getErrorCode(), TokenValidatiEnum.OTHER_ERRORE.getDesc(), true, "后台对每次请求进行token验证", null));
         }
         return resultFormat;

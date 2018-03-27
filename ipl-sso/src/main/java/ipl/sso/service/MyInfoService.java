@@ -18,5 +18,5 @@ public interface MyInfoService {
      * @param uemail 用户email
      * @return 用户
      */
-    UserInfo getUserInfoByEmail(String uemail);
+    UserInfo getUserInfoById(long id);
 }

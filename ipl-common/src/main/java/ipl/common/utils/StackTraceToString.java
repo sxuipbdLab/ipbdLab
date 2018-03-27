@@ -4,8 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * <p>Descirption:如果我们的业务逻辑处理需要将堆栈信息显示给用户，
- * 就需要获取堆栈的全部信息</p>
+ * <p>Descirption:日志中需要获取堆栈的全部信息</p>
  *
  * @author 王海
  * @version V1.0

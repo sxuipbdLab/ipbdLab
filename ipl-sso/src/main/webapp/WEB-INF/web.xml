@@ -52,5 +52,8 @@
         <!-- 所以需要在spring-mvc.xml中添加静态资源映射（css、js、jsp、html等等） -->
         <url-pattern>/v1/*</url-pattern>
     </servlet-mapping>
+    <session-config>
+        <session-timeout>1</session-timeout>
+    </session-config>
 
 </web-app>

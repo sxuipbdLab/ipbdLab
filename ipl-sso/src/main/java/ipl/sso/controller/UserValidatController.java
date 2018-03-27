@@ -2,6 +2,7 @@ package ipl.sso.controller;
 
 import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.ResultFormat;
+import ipl.common.utils.StackTraceToString;
 import ipl.sso.enums.UserValidatiEnum;
 import ipl.sso.service.UserValidatService;
 import org.apache.commons.lang3.StringUtils;
@@ -35,8 +36,8 @@ public class UserValidatController {
         String result = null;
 
         //参数有效性校验
-        if (StringUtils.isBlank(param) || type == null) {
-            result = JacksonUtil.bean2Json(ResultFormat.build("105", "校验值不能为空", true, "check", null));
+        if (StringUtils.isBlank(param) || type.toString() == null) {
+            result = JacksonUtil.bean2Json(ResultFormat.build("105", "校验值/检验类型不能为空", true, "check", null));
         }
         // 暂时去掉： type != UserValidatiEnum.USER_PHONE.getType() &&
         if (type != UserValidatiEnum.USER_NAME.getType() && type != UserValidatiEnum.USER_EMAIL.getType()) {
@@ -52,6 +53,7 @@ public class UserValidatController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.info(StackTraceToString.getStackTraceString(e));
             result = JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", true, "check", null));
         }
         return result;

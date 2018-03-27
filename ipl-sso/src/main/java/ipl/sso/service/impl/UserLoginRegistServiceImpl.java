@@ -1,9 +1,8 @@
 package ipl.sso.service.impl;
 
-import ipl.common.token.JWTManager;
-import ipl.common.token.PlayLoadHelper;
 import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.ResultFormat;
+import ipl.common.utils.StackTraceToString;
 import ipl.manager.mapper.UserInfoMapper;
 import ipl.manager.pojo.UserInfo;
 import ipl.manager.pojo.UserInfoExample;
@@ -14,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public String userLogin(String email, String password, HttpServletResponse response) {
+    public String userLogin(String email, String password, HttpServletRequest request, HttpServletResponse response) {
         // 此情况几乎不可能出现，所以没写入API接口文档
         if (email == null || password == null) {
             LOGGER.info("缺少信息{}", email);
@@ -64,18 +64,26 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         String time = sdf.format(new Date());*/
         user.setLoginTime(new Date());
         user.setLoginCount(user.getLoginCount() + 1);
+        userInfoMapper.loginUpdate(user);
+        LOGGER.info("用户，{}第==={}次登录",user.getLoginCount());
         // 把用户对象中的密码清空。
         user.setPassword(null);
 
-        // 生成token并用cookie携带
+/*        // 生成token并用cookie携带
         PlayLoadHelper playLoadHelper = new PlayLoadHelper(new Date(), email);
         String token = JWTManager.createToken(playLoadHelper, 90000);
         System.out.println("response中的token=======" + token);
 //        response.addHeader("Set-Cookie", "uid=112; Path=/; HttpOnly");
         Cookie cookie = new Cookie("access_token", token);
-        response.addCookie(cookie);
 
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "登录成功", false, "login", token));
+        response.addCookie(cookie);*/
+
+        //创建session对象
+        HttpSession session = request.getSession();
+        //把用户数据保存在session域对象中
+        session.setAttribute("sessionid", user.getId());
+
+        return JacksonUtil.bean2Json(ResultFormat.build("100", "登录成功", false, "login", null));
     }
 
     @Override
@@ -92,12 +100,14 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         user.setLastLoginTime(new Date());
 //        设置登录次数
         user.setLoginCount(1);
+        user.setIdentity((short) 1);
         // md5加密
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         try {
             userInfoMapper.insert(user);
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.info(StackTraceToString.getStackTraceString(e));
             return JacksonUtil.bean2Json(ResultFormat.build("107", "注册失败，请联系站长", true, "register", null));
         }
         return JacksonUtil.bean2Json(ResultFormat.build("106", "注册成功", false, "register", null));
