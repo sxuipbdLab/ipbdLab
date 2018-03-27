@@ -1,6 +1,7 @@
 package ipl.restapi.controller;
 
 import ipl.common.utils.JacksonUtil;
+import ipl.common.utils.ResultFormat;
 import ipl.manager.pojo.Collect;
 import ipl.restapi.service.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,16 @@ public class CollectController {
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
     public Object getALLCollect(@PathVariable Long userId) {
         //返回所有角色信息
-        List<Collect> collect = collectService.getAllCollect(userId);
-
+        List<Collect> collect;
+        try{
+            collect = collectService.getAllCollect(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("901","返回收藏信息失败",true,"collect",null));
+        }
         //将角色信息变为JSON格式赋值给roleJson
-        String roleJson = JacksonUtil.bean2Json(collect);
-        return roleJson;
+        String data = JacksonUtil.bean2Json(collect);
+        return JacksonUtil.bean2Json(ResultFormat.build("902","返回收藏信息成功",true,"collect",data));
     }
 
     @RequestMapping(value = "/collects/add/{userId}", method = {GET, POST},
@@ -55,18 +61,27 @@ public class CollectController {
         coll.setDocId(docId);
         coll.setCollTime(collTime);
         coll.setDescription(description);
-
-        collectService.insertByuserId(coll);
-
-        List<Collect> collect = collectService.getAllCollect(userId);
-        String roleJson = JacksonUtil.bean2Json(collect);
-        return roleJson;
+        try{
+            collectService.insertByuserId(coll);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("903","添加收藏失败",true,"collect",null));
+        }
+        List<Collect> collect;
+        try{
+            collect = collectService.getAllCollect(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("904","添加收藏成功返回信息失败",true,"collect",null));
+        }
+        String data = JacksonUtil.bean2Json(collect);
+        return JacksonUtil.bean2Json(ResultFormat.build("905","添加收藏成功返回信息成功",true,"collect",data));
     }
 
-    @RequestMapping(value = "/collects/update/{userId}/{docId}", method = {GET, POST},
+    @RequestMapping(value = "/collects/update/{userId}", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object updateByUserIdAndDocId(@PathVariable Long userId,@PathVariable Long docId, @RequestParam(value = "description") String description) {
+    public Object updateByUserIdAndDocId(@PathVariable Long userId,@RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description) {
         Date collTime = new Date();
         Collect coll = new Collect();
         coll.setUserId(userId);
@@ -74,11 +89,22 @@ public class CollectController {
         coll.setCollTime(collTime);
         coll.setDescription(description);
 
-        collectService.updateByUserIdAndDocId(coll);
+        try{
+            collectService.updateByUserIdAndDocId(coll);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("906","更新收藏失败",true,"collect",null));
+        }
 
-        List<Collect> collect = collectService.getAllCollect(userId);
-        String roleJson = JacksonUtil.bean2Json(collect);
-        return roleJson;
+        List<Collect> collect;
+        try{
+            collect = collectService.getAllCollect(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("907","更新收藏成功返回信息失败",true,"collect",null));
+        }
+        String data = JacksonUtil.bean2Json(collect);
+        return JacksonUtil.bean2Json(ResultFormat.build("908","更新收藏成功返回信息成功",true,"collect",data));
     }
 
     @RequestMapping(value = "/collects/delete/{userId}/{docId}", method = {GET, POST},
@@ -90,10 +116,21 @@ public class CollectController {
         coll.setUserId(userId);
         coll.setDocId(docId);
 
-        collectService.delByPK(coll);
+        try{
+            collectService.delByPK(coll);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("909","删除收藏信息失败",true,"collect",null));
+        }
 
-        List<Collect> collect = collectService.getAllCollect(userId);
-        String roleJson = JacksonUtil.bean2Json(collect);
-        return roleJson;
+        List<Collect> collect;
+        try{
+            collect = collectService.getAllCollect(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("910","删除收藏信息成功返回信息失败",true,"collect",null));
+        }
+        String data = JacksonUtil.bean2Json(collect);
+        return JacksonUtil.bean2Json(ResultFormat.build("911","删除收藏信息成功返回信息成功",true,"collect",data));
     }
 }
