@@ -145,12 +145,12 @@ public class JWTManager {
             resultFormat = "ok";
             // 验证不通过，拒绝请求api接口，并给前端返回resultFormat
         } catch (ExpiredJwtException e) {
-            resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.EXPIRE.getErrorCode(), TokenValidatiEnum.EXPIRE.getDesc(), true, "后台对每次请求进行token验证", null));
+            resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.EXPIRE.getErrorCode(), TokenValidatiEnum.EXPIRE.getDesc(), 1, "后台对每次请求进行token验证", null));
         } catch (SignatureException e) {
-            resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.NO_TRUST.getErrorCode(), TokenValidatiEnum.NO_TRUST.getDesc(), true, "后台对每次请求进行token验证", null));
+            resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.NO_TRUST.getErrorCode(), TokenValidatiEnum.NO_TRUST.getDesc(), 1, "后台对每次请求进行token验证", null));
         } catch (Exception e) {
 
-            resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.OTHER_ERRORE.getErrorCode(), TokenValidatiEnum.OTHER_ERRORE.getDesc(), true, "后台对每次请求进行token验证", null));
+            resultFormat = JacksonUtil.bean2Json(ResultFormat.build(TokenValidatiEnum.OTHER_ERRORE.getErrorCode(), TokenValidatiEnum.OTHER_ERRORE.getDesc(), 1, "后台对每次请求进行token验证", null));
         }
         return resultFormat;
     }

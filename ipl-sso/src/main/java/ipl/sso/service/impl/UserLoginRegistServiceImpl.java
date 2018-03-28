@@ -90,7 +90,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
     public String createUser(UserInfo user) {
         // 此情况几乎不可能出现，所以没写入API接口文档
         if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
-            return JacksonUtil.bean2Json(ResultFormat.build("400", "username,email,password没有完整提供", 1, "create", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("107", "username,email,password没有完整提供", 1, "register", null));
         }
 //        设置注册时间
         user.setRegistTime(new Date());
