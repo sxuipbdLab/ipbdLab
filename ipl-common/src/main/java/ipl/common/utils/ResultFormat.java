@@ -23,7 +23,7 @@ public class ResultFormat {
     /**
      *  前端是否有必要读取msg中的数据
      */
-    private Boolean ifmsg;
+    private int ifmsg;
 
     /**
      *   前端请求的数据
@@ -35,14 +35,14 @@ public class ResultFormat {
      */
     private String type;
 
-    public static ResultFormat build(String status, String msg, Boolean ifmsg, String type, String data) {
+    public static ResultFormat build(String status, String msg, int ifmsg, String type, String data) {
         return new ResultFormat(status, msg, ifmsg, type, data);
     }
 
     public ResultFormat() {
     }
 
-    public ResultFormat(String status, String msg, Boolean ifmsg, String type, String data) {
+    public ResultFormat(String status, String msg, int ifmsg, String type, String data) {
         this.status = status;
         this.msg = msg;
         this.ifmsg = ifmsg;
@@ -66,11 +66,11 @@ public class ResultFormat {
         this.status = status;
     }
 
-    public Boolean getIfmsg() {
+    public int getIfmsg() {
         return ifmsg;
     }
 
-    public void setIfmsg(Boolean ifmsg) {
+    public void setIfmsg(int ifmsg) {
         this.ifmsg = ifmsg;
     }
 
