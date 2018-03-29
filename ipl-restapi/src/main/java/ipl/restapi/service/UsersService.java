@@ -2,6 +2,8 @@ package ipl.restapi.service;
 
 import ipl.manager.pojo.UserInfo;
 
+import java.util.List;
+
 /**
  * <p>Descirption:</p>
  *
@@ -31,5 +33,7 @@ public interface UsersService {
      * @param identity
      */
     void updateIndentityByIndentityDOWN(Short identity);
+
+    List<UserInfo> getAllUsers();
 
 }

@@ -413,4 +413,7 @@
         login_count = #{loginCount,jdbcType=INTEGER}
         where id = #{id,jdbcType=BIGINT}
     </update>
+    <select id="getAllUser" resultMap="BaseResultMap">
+        SELECT * FROM user_info
+    </select>
 </mapper>
