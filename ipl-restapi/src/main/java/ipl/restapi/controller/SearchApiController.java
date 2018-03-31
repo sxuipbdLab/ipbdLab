@@ -111,6 +111,4 @@ public class SearchApiController {
         System.out.println(dataUrl);
         return ConnectTheNet(dataUrl);
     }
-
-
 }
