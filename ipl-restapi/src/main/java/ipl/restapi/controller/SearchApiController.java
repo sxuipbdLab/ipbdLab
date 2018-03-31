@@ -91,6 +91,7 @@ public class SearchApiController {
         try {
             JsonNode node = mapper.readTree(jsonStr);
             String resultJson = node.get("mesg").get("RESULT").toString();
+
             //JsonNode resultNode = mapper.readTree(resultJson);
             Result result = JacksonUtil.json2Bean(resultJson,Result.class);
             resultObjectFromApi = ResultObjectFromApi.build(node.get("status").intValue(),node.get("FOUNDNUM").toString(),result);
