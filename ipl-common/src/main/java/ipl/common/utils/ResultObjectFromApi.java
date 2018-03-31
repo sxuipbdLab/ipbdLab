@@ -11,10 +11,10 @@ package ipl.common.utils;
  */
 public class ResultObjectFromApi {
     private int code;
-    private int count;
-    private Object data;
+    private String count;
+    private Result data;
 
-    public static ResultObjectFromApi build(int code,int count,Object data) {
+    public static ResultObjectFromApi build(int code,String count,Result data) {
         return new ResultObjectFromApi(code,count,data);
     }
 
@@ -22,7 +22,7 @@ public class ResultObjectFromApi {
 
     }
 
-    public ResultObjectFromApi(int code,int count,Object data) {
+    public ResultObjectFromApi(int code,String count,Result data) {
         this.code = code;
         this.count = count;
         this.data = data;
@@ -36,19 +36,19 @@ public class ResultObjectFromApi {
         this.code = code;
     }
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
 
-    public Object getData() {
+    public Result getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(Result data) {
         this.data = data;
     }
 }

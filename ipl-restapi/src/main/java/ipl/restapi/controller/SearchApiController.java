@@ -1,5 +1,10 @@
 package ipl.restapi.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ipl.common.utils.JacksonUtil;
+import ipl.common.utils.Result;
+import ipl.common.utils.ResultObjectFromApi;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -78,13 +84,24 @@ public class SearchApiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String ss = sb.toString();
-        ss = ss.replace("status","code");
-        ss = ss.replace("FOUNDNUM","count");
-        ss = ss.replace("data","RESULT");
-        ss = ss.replace("mesg","msg");
 
-        return ss;
+        ResultObjectFromApi resultObjectFromApi = new ResultObjectFromApi();
+        String jsonStr = sb.toString();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode node = mapper.readTree(jsonStr);
+            String resultJson = node.get("mesg").get("RESULT").toString();
+            //JsonNode resultNode = mapper.readTree(resultJson);
+            Result result = JacksonUtil.json2Bean(resultJson,Result.class);
+            resultObjectFromApi = ResultObjectFromApi.build(node.get("status").intValue(),node.get("FOUNDNUM").toString(),result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        return JacksonUtil.bean2Json(resultObjectFromApi);
     }
 
     @RequestMapping(value = "/getUrl", method = {GET, POST},
