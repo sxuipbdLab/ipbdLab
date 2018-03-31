@@ -4,11 +4,20 @@ import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.ResultFormat;
 import ipl.manager.pojo.Collect;
 import ipl.restapi.service.CollectService;
+import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.List;
 
@@ -132,5 +141,46 @@ public class CollectController {
         }
         String data = JacksonUtil.bean2Json(collect);
         return JacksonUtil.bean2Json(ResultFormat.build("911","删除收藏信息成功返回信息成功",0,"collect",data));
+    }
+
+    @RequestMapping(value = "/getUrl", method = {GET, POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @ResponseBody
+    public Object getUrl(@RequestParam(value = "Url")String Url){
+        StringBuilder sb = null;
+        String loginUrl = "http://172.21.201.131/search/user/login";
+        String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=1&pn=10&fl=TI,PN&q=TI=" + Url;
+
+        HttpClient httpClient = new HttpClient();
+        PostMethod postMethod = new PostMethod(loginUrl);
+        NameValuePair[] data = { new NameValuePair("name", "webmaster"), new NameValuePair("pwd", "dfld1234") };
+        postMethod.setRequestBody(data);
+
+        try{
+            httpClient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+            int statusCode = httpClient.executeMethod(postMethod);
+            Cookie compCookie = new Cookie();
+            Cookie[] cookies = httpClient.getState().getCookies();
+            StringBuffer tmpcookies = new StringBuffer();
+            for(Cookie c : cookies){
+                tmpcookies.append(c.toString() + ";");
+            }
+            System.out.println(tmpcookies);
+            URL url = new URL(dataUrl);
+            URLConnection conn = url.openConnection();
+            conn.setRequestProperty("Cookies",tmpcookies.toString());
+            conn.setDoInput(true);
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            sb = new StringBuilder();
+            String line = null;
+            while((line = br.readLine()) != null){
+                sb.append(line);
+            }
+            System.out.println(sb);
+        }catch (Exception e){
+            e.printStackTrace();
+            return JacksonUtil.bean2Json(ResultFormat.build("000","返回失败",0,"getUrl",null));
+        }
+        return JacksonUtil.bean2Json(sb);
     }
 }
