@@ -78,7 +78,13 @@ public class SearchApiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return sb;
+        String ss = sb.toString();
+        ss = ss.replace("status","code");
+        ss = ss.replace("FOUNDNUM","count");
+        ss = ss.replace("data","RESULT");
+        ss = ss.replace("mesg","msg");
+
+        return ss;
     }
 
     @RequestMapping(value = "/getUrl", method = {GET, POST},
