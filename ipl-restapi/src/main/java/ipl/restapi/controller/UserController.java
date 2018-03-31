@@ -45,7 +45,7 @@ public class UserController {
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
     public String getAllUserJson(){
-        List<UserInfo> userInfo;
+        List<UserInfo> userInfo = null;
         try{
             //返回所有角色信息
             userInfo = usersService.getAllUsers();
@@ -54,8 +54,8 @@ public class UserController {
             return JacksonUtil.bean2Json(ResultFormat.build("202","返回数据失败",1,"role",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        String date = JacksonUtil.bean2Json(userInfo);
-        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", date));
+
+        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", userInfo));
 
     }
 }

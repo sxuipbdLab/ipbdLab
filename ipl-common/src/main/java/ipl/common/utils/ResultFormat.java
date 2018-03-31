@@ -28,21 +28,21 @@ public class ResultFormat {
     /**
      *   前端请求的数据
      */
-    private String data;
+    private Object data;
 
     /**
      *  前后端type相同，用于前端验证哪个接口返回数据了
      */
     private String type;
 
-    public static ResultFormat build(String status, String msg, int ifmsg, String type, String data) {
+    public static ResultFormat build(String status, String msg, int ifmsg, String type, Object data) {
         return new ResultFormat(status, msg, ifmsg, type, data);
     }
 
     public ResultFormat() {
     }
 
-    public ResultFormat(String status, String msg, int ifmsg, String type, String data) {
+    public ResultFormat(String status, String msg, int ifmsg, String type, Object data) {
         this.status = status;
         this.msg = msg;
         this.ifmsg = ifmsg;
@@ -78,7 +78,7 @@ public class ResultFormat {
         this.data = data;
     }
 
-    public String getData() {
+    public Object getData() {
         return this.data;
     }
 

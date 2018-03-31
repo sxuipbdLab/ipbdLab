@@ -152,35 +152,43 @@ public class CollectController {
         String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=1&pn=10&fl=TI,PN&q=TI=" + Url;
 
         HttpClient httpClient = new HttpClient();
+
+        // 模拟登陆，按实际服务器端要求选用 Post 或 Get 请求方式
         PostMethod postMethod = new PostMethod(loginUrl);
+
+        // 设置登陆时要求的信息，用户名和密码
         NameValuePair[] data = { new NameValuePair("name", "webmaster"), new NameValuePair("pwd", "dfld1234") };
         postMethod.setRequestBody(data);
 
-        try{
+        try {
+            // 设置 HttpClient 接收 Cookie,用与浏览器一样的策略
             httpClient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
             int statusCode = httpClient.executeMethod(postMethod);
+
+            // 获得登陆后的 Cookie
             Cookie compCookie = new Cookie();
             Cookie[] cookies = httpClient.getState().getCookies();
             StringBuffer tmpcookies = new StringBuffer();
-            for(Cookie c : cookies){
+
+            for (Cookie c : cookies) {
                 tmpcookies.append(c.toString() + ";");
+                System.out.println("cookies = " + c.toString());
             }
-            System.out.println(tmpcookies);
+
             URL url = new URL(dataUrl);
             URLConnection conn = url.openConnection();
-            conn.setRequestProperty("Cookies",tmpcookies.toString());
+            conn.setRequestProperty("Cookie", tmpcookies.toString());
             conn.setDoInput(true);
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             sb = new StringBuilder();
             String line = null;
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
             System.out.println(sb);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("000","返回失败",0,"getUrl",null));
         }
-        return JacksonUtil.bean2Json(sb);
+        return sb;
     }
 }
