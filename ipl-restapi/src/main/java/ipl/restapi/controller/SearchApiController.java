@@ -105,7 +105,7 @@ public class SearchApiController {
         return JacksonUtil.bean2Json(resultObjectFromApi);
     }
 
-    @RequestMapping(value = "/getUrl", method = {GET, POST},
+    @RequestMapping(value = "/getSearch", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Object getUrl(@RequestParam(value = "Url")String Url, @RequestParam(value = "dp") int dp){
