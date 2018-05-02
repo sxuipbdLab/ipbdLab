@@ -49,7 +49,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
 
         List<UserInfo> list = userInfoMapper.selectByExample(userInfoExample);
         if (list.size() != 1) {
-            System.out.println("邮箱参数=======：" + email);
+            System.out.println("邮箱参数========：" + email);
             LOGGER.info("没有邮箱为：{}的用户", email);
             return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，无此邮箱", true, "login", null));
         }
