@@ -100,8 +100,6 @@ public class SearchApiController {
             e.printStackTrace();
         }
 
-
-
         return JacksonUtil.bean2Json(resultObjectFromApi);
     }
 
