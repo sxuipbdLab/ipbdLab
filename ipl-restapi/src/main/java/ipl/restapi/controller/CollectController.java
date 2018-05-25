@@ -46,8 +46,7 @@ public class CollectController {
             return JacksonUtil.bean2Json(ResultFormat.build("901","返回收藏信息失败",1,"collect",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("902","返回收藏信息成功",0,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("902","返回收藏信息成功",0,"collect",collect));
     }
 
     @RequestMapping(value = "/collects/add/{userId}", method = {GET, POST},
@@ -74,8 +73,7 @@ public class CollectController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("904","添加收藏成功返回信息失败",1,"collect",null));
         }
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("905","添加收藏成功返回信息成功",0,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("905","添加收藏成功返回信息成功",0,"collect",collect));
     }
 
     @RequestMapping(value = "/collects/update/{userId}", method = {GET, POST},
@@ -103,8 +101,7 @@ public class CollectController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("907","更新收藏成功返回信息失败",1,"collect",null));
         }
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("908","更新收藏成功返回信息成功",0,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("908","更新收藏成功返回信息成功",0,"collect",collect));
     }
 
     @RequestMapping(value = "/collects/delete/{userId}/{docId}", method = {GET, POST},
@@ -130,8 +127,7 @@ public class CollectController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("910","删除收藏信息成功返回信息失败",1,"collect",null));
         }
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("911","删除收藏信息成功返回信息成功",0,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("911","删除收藏信息成功返回信息成功",0,"collect",collect));
     }
 
 }

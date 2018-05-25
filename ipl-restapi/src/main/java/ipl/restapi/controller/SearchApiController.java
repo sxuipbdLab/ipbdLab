@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class SearchApiController {
 
     public Object ConnectTheNet(String dataUrl){
+        System.out.println(dataUrl);
         StringBuilder sb = null;
 
         String loginUrl = "http://172.21.201.131/search/user/login";
@@ -54,7 +56,6 @@ public class SearchApiController {
 
         // 设置登陆时要求的信息，用户名和密码
         NameValuePair[] data = { new NameValuePair("name", "webmaster"), new NameValuePair("pwd", "dfld1234") };
-        //NameValuePair[] data = {new NameValuePair("Login.Token1","201502401146"),new NameValuePair("Login.Token2","180026")};
         postMethod.setRequestBody(data);
 
         try {
@@ -69,6 +70,7 @@ public class SearchApiController {
                 tmpcookies.append(c.toString() + ";");
                 System.out.println("cookies = " + c.toString());
             }
+
             URL url = new URL(dataUrl);
             URLConnection conn = url.openConnection();
             conn.setRequestProperty("Cookie", tmpcookies.toString());
@@ -80,27 +82,28 @@ public class SearchApiController {
                 System.out.println("line = ****   " + line);
                 sb.append(line);
             }
-            System.out.println(sb);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        ResultObjectFromApi resultObjectFromApi = new ResultObjectFromApi();
-        String jsonStr = sb.toString();
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            JsonNode node = mapper.readTree(jsonStr);
-            String resultJson = node.get("mesg").get("RESULT").toString();
-
-            //JsonNode resultNode = mapper.readTree(resultJson);
-            Result result = JacksonUtil.json2Bean(resultJson,Result.class);
-            resultObjectFromApi = ResultObjectFromApi.build(node.get("status").intValue(),node.get("FOUNDNUM").toString(),result);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return JacksonUtil.bean2Json(resultObjectFromApi);
+//
+//
+//        ResultObjectFromApi resultObjectFromApi = new ResultObjectFromApi();
+//        String jsonStr = sb.toString();
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+//            JsonNode node = mapper.readTree(jsonStr);
+//            String resultJson = node.get("mesg").get("RESULT").toString();
+//
+//            //JsonNode resultNode = mapper.readTree(resultJson);
+//            Result result = JacksonUtil.json2Bean(resultJson,Result.class);
+//            resultObjectFromApi = ResultObjectFromApi.build(node.get("status").intValue(),node.get("FOUNDNUM").toString(),result);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return JacksonUtil.bean2Json(resultObjectFromApi);
+        return sb;
     }
 
     @RequestMapping(value = "/getSearch", method = {GET, POST},
@@ -110,14 +113,12 @@ public class SearchApiController {
 
         StringBuilder sb = null;
         // 登陆 Url
-        System.out.println(Url);
         try {
             Url = URLEncoder.encode(Url,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=10&fl=TI,PN,AN,PD,AU,AD,LS,AB,PA&q=TI=" +Url;
-        System.out.println(Url);
 
         return ConnectTheNet(dataUrl);
     }

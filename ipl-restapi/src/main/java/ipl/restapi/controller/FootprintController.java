@@ -45,8 +45,7 @@ public class FootprintController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("301","返回数据失败",1,"footprint",null));
         }
-        String date = JacksonUtil.bean2Json(footprint);
-        return JacksonUtil.bean2Json(ResultFormat.build("302","返回数据成功",0,"footprint",date));
+        return JacksonUtil.bean2Json(ResultFormat.build("302","返回数据成功",0,"footprint",footprint));
     }
 
     @RequestMapping(value = "/footprint/insertBy{userId}", method = {GET, POST},
@@ -117,8 +116,7 @@ public class FootprintController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("310","清除足迹成功返回信息失败",1,"footprint",null));
         }
-        String data = JacksonUtil.bean2Json(footprints);
-        return JacksonUtil.bean2Json(ResultFormat.build("311","清除足迹成功返回信息成功",0,"footprint",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("311","清除足迹成功返回信息成功",0,"footprint",footprints));
     }
 
     @RequestMapping(value = "/footprint/delBy{userId}", method = {GET, POST},
@@ -143,7 +141,6 @@ public class FootprintController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("307","删除单项足迹成功返回数据失败",1,"footprint",null));
         }
-        String data = JacksonUtil.bean2Json(footprints);
-        return JacksonUtil.bean2Json(ResultFormat.build("308","删除单项足迹成功返回数据成功",0,"footprint",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("308","删除单项足迹成功返回数据成功",0,"footprint",footprints));
     }
 }

@@ -51,8 +51,7 @@ public class RoleController {
             return JacksonUtil.bean2Json(ResultFormat.build("202","返回数据失败",1,"role",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        String date = JacksonUtil.bean2Json(role);
-        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", date));
+        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", role));
     }
 
     // 可以匹配多个value,produces属性避免乱码
@@ -69,8 +68,7 @@ public class RoleController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("202","返回数据失败",1,"role",null));
         }
-        String date = JacksonUtil.bean2Json(role);
-        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", date));
+        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", role));
     }
 
     // 可以匹配多个value,produces属性避免乱码
@@ -108,9 +106,7 @@ public class RoleController {
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("207","删除成功返回角色所有信息时失败",1,"role",null));
         }
-        //将角色信息变为JSON格式赋值给roleJson
-        String date = JacksonUtil.bean2Json(role);
-        return JacksonUtil.bean2Json(ResultFormat.build("208", "删除成功返回角色所有信息时成功", 0, "role", date));
+        return JacksonUtil.bean2Json(ResultFormat.build("208", "删除成功返回角色所有信息时成功", 0, "role", role));
     }
 
     // 可以匹配多个value,produces属性避免乱码
@@ -161,8 +157,7 @@ public class RoleController {
             return JacksonUtil.bean2Json(ResultFormat.build("209","添加角色成功返回所有信息时失败",1,"role",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        String date = JacksonUtil.bean2Json(rolel);
-        return JacksonUtil.bean2Json(ResultFormat.build("210", "添加角色成功返回所有信息时成功", 0, "role", date));
+        return JacksonUtil.bean2Json(ResultFormat.build("210", "添加角色成功返回所有信息时成功", 0, "role", rolel));
     }
 
     @RequestMapping(value = "/roles/update",
@@ -212,7 +207,6 @@ public class RoleController {
             return JacksonUtil.bean2Json(ResultFormat.build("213", "更新角色成功返回数据出错", 1, "role", null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        String date = JacksonUtil.bean2Json(roleArr);
-        return JacksonUtil.bean2Json(ResultFormat.build("214", "更新角色成功返回数据成功", 0, "role", date));
+        return JacksonUtil.bean2Json(ResultFormat.build("214", "更新角色成功返回数据成功", 0, "role", roleArr));
     }
 }

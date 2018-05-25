@@ -51,11 +51,11 @@ public class UserController {
             userInfo = usersService.getAllUsers();
        }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("202","返回数据失败",1,"role",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("202","返回数据失败",1,"user",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
 
-        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "role", userInfo));
+        return JacksonUtil.bean2Json(ResultFormat.build("201", "返回数据成功", 0, "user", userInfo));
 
     }
 }
