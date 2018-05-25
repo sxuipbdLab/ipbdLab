@@ -1,15 +1,12 @@
 package ipl.restapi.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ipl.common.utils.JacksonUtil;
-import ipl.common.utils.Result;
-import ipl.common.utils.ResultObjectFromApi;
+import net.dongliu.requests.Requests;
+import net.dongliu.requests.Response;
+import net.dongliu.requests.Session;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -19,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -85,24 +86,6 @@ public class SearchApiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//
-//
-//        ResultObjectFromApi resultObjectFromApi = new ResultObjectFromApi();
-//        String jsonStr = sb.toString();
-//        ObjectMapper mapper = new ObjectMapper();
-//        try {
-//            JsonNode node = mapper.readTree(jsonStr);
-//            String resultJson = node.get("mesg").get("RESULT").toString();
-//
-//            //JsonNode resultNode = mapper.readTree(resultJson);
-//            Result result = JacksonUtil.json2Bean(resultJson,Result.class);
-//            resultObjectFromApi = ResultObjectFromApi.build(node.get("status").intValue(),node.get("FOUNDNUM").toString(),result);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return JacksonUtil.bean2Json(resultObjectFromApi);
         return sb;
     }
 
@@ -132,5 +115,41 @@ public class SearchApiController {
         String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?un=103&sid=103&fk=FT,TI&dk=[{\"DCK\":\""+docAN+"@"+docPIN+"@"+docPD+"\",\"MID\":\""+mid+"\"}]";
         System.out.println(dataUrl);
         return ConnectTheNet(dataUrl);
+    }
+
+    @RequestMapping(value = "/search", method = {GET, POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public Object newSearch(@RequestParam(value = "searchstr")String searchstr,@RequestParam(value = "page")String page) throws UnsupportedEncodingException {
+        String url = "http://172.21.201.131/search/user/login";
+        String dataurl = "http://172.21.201.131/search/search/result";
+        Map<String, Object> params = new HashMap<>();
+        params.put("name","webmaster");
+        params.put("pwd","dfld1234");
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("searchstr", searchstr);
+        data.put("page", page);
+
+        Session session = Requests.session();
+        Response<String> resp = session.post(url).body(params).send().toTextResponse();
+
+        Response<String> resp2 = session
+                .post(dataurl)
+                .body(data)
+                .send()
+                .toTextResponse();
+        return re_for_html(resp2.getBody());
+    }
+
+    public String re_for_html(String webSource){
+        String regex = "<li>\\s+<div[^n][\\s\\S]+?</li>";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(webSource);
+        String result = "";
+        while(matcher.find()){
+            result += matcher.group();
+        }
+        return result;
     }
 }
