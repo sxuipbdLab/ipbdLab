@@ -92,16 +92,16 @@ public class SearchApiController {
     @RequestMapping(value = "/getSearch", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Object getUrl(@RequestParam(value = "Url")String Url, @RequestParam(value = "dp") int dp){
+    public Object getUrl(@RequestParam(value = "searchStr")String searchStr, @RequestParam(value = "dp") int dp){
 
         StringBuilder sb = null;
         // 登陆 Url
         try {
-            Url = URLEncoder.encode(Url,"UTF-8");
+            searchStr = URLEncoder.encode(searchStr,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=10&fl=TI,PN,AN,PD,AU,AD,LS,AB,PA&q=TI=" +Url;
+        String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=10&fl=TI,PN,AN,PD,AU,AD,LS,AB,PA&q=TI=" +searchStr;
 
         return ConnectTheNet(dataUrl);
     }
