@@ -3,11 +3,6 @@ package ipl.restapi.controller;
 import net.dongliu.requests.Requests;
 import net.dongliu.requests.Response;
 import net.dongliu.requests.Session;
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,13 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -43,52 +33,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 @CrossOrigin(origins = "*",methods = {GET,POST})
 public class SearchApiController {
+    Analog_landing analog_landing = new Analog_landing();
 
-    public Object ConnectTheNet(String dataUrl){
-        System.out.println(dataUrl);
-        StringBuilder sb = null;
-
-        String loginUrl = "http://172.21.201.131/search/user/login";
-
-        HttpClient httpClient = new HttpClient();
-
-        // 模拟登陆，按实际服务器端要求选用 Post 或 Get 请求方式
-        PostMethod postMethod = new PostMethod(loginUrl);
-
-        // 设置登陆时要求的信息，用户名和密码
-        NameValuePair[] data = { new NameValuePair("name", "webmaster"), new NameValuePair("pwd", "dfld1234") };
-        postMethod.setRequestBody(data);
-
-        try {
-            // 设置 HttpClient 接收 Cookie,用与浏览器一样的策略
-            httpClient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-            int statusCode = httpClient.executeMethod(postMethod);
-            // 获得登陆后的 Cookie
-            Cookie compCookie = new Cookie();
-            Cookie[] cookies = httpClient.getState().getCookies();
-            StringBuffer tmpcookies = new StringBuffer();
-            for (Cookie c : cookies) {
-                tmpcookies.append(c.toString() + ";");
-                System.out.println("cookies = " + c.toString());
-            }
-
-            URL url = new URL(dataUrl);
-            URLConnection conn = url.openConnection();
-            conn.setRequestProperty("Cookie", tmpcookies.toString());
-            conn.setDoInput(true);
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            sb = new StringBuilder();
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                System.out.println("line = ****   " + line);
-                sb.append(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sb;
-    }
-
+    /**
+     * 调用移动版API
+     * @param searchStr
+     * @param dp
+     * @return
+     */
     @RequestMapping(value = "/getSearch", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -103,20 +55,34 @@ public class SearchApiController {
         }
         String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=10&fl=TI,PN,AN,PD,AU,AD,LS,AB,PA&q=TI=" +searchStr;
 
-        return ConnectTheNet(dataUrl);
+        return analog_landing.ConnectTheNet(dataUrl);
     }
 
+    /**
+     * 移动版API获取全文
+     * @param docPIN
+     * @param docAN
+     * @param docPD
+     * @param mid
+     * @return
+     */
     @RequestMapping(value = "/getFullText", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Object getFullText(@RequestParam(value = "docPIN")String docPIN,@RequestParam(value = "docAN")String docAN,@RequestParam(value = "docPD") String docPD,@RequestParam(value = "mid") String mid){
 
-
         String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?un=103&sid=103&fk=FT,TI&dk=[{\"DCK\":\""+docAN+"@"+docPIN+"@"+docPD+"\",\"MID\":\""+mid+"\"}]";
         System.out.println(dataUrl);
-        return ConnectTheNet(dataUrl);
+        return analog_landing.ConnectTheNet(dataUrl);
     }
 
+    /**
+     * 爬虫方式进行检索
+     * @param searchstr
+     * @param page
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     @RequestMapping(value = "/search", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
