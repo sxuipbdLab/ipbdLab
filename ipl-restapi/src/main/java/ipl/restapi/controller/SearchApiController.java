@@ -36,15 +36,20 @@ public class SearchApiController {
     Analog_landing analog_landing = new Analog_landing();
 
     /**
-     * 调用移动版API
-     * @param searchStr
-     * @param dp
+     * 检索API
+     * @param searchStr 检索词
+     * @param dp 页码
+     * @param pn = 10 每页显示条数
+     * @param f1 = TI,PN 返回结果字段
      * @return
      */
     @RequestMapping(value = "/getSearch", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Object getUrl(@RequestParam(value = "searchStr")String searchStr, @RequestParam(value = "dp") int dp){
+    public Object getUrl(@RequestParam() String searchStr,
+                         @RequestParam() String dp,
+                         @RequestParam(defaultValue = "10")String pn,
+                         @RequestParam(defaultValue = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT") String f1){
 
         StringBuilder sb = null;
         // 登陆 Url
@@ -53,25 +58,30 @@ public class SearchApiController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=10&fl=TI,PN,AN,PD,AU,AD,LS,AB,PA&q=TI=" +searchStr;
+        String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=" + pn + "&fl=" + f1 + "&q=TI=" +searchStr;
 
         return analog_landing.ConnectTheNet(dataUrl);
     }
 
     /**
-     * 移动版API获取全文
-     * @param docPIN
-     * @param docAN
-     * @param docPD
-     * @param mid
+     * 获取全文
+     * @param docPIN 公开号
+     * @param docAN 申请号
+     * @param docPD 公开日
+     * @param mid 索引库号
+     * @param fk = TI,AB,CLM,FT,PA,IPC,AN,PN,AU,AD,PD,PR,ADDR,PC,AGC,AGT,QWFT,PCTF,IAN,IPN 返回结果字段
      * @return
      */
     @RequestMapping(value = "/getFullText", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Object getFullText(@RequestParam(value = "docPIN")String docPIN,@RequestParam(value = "docAN")String docAN,@RequestParam(value = "docPD") String docPD,@RequestParam(value = "mid") String mid){
+    public Object getFullText(@RequestParam() String docPIN,
+                              @RequestParam() String docAN,
+                              @RequestParam() String docPD,
+                              @RequestParam() String mid,
+                              @RequestParam(defaultValue = "TI,AB,CLM,FT,PA,IPC,AN,PN,AU,AD,PD,PR,ADDR,PC,AGC,AGT,QWFT,PCTF,IAN,IPN") String fk){
 
-        String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?un=103&sid=103&fk=FT,TI&dk=[{\"DCK\":\""+docAN+"@"+docPIN+"@"+docPD+"\",\"MID\":\""+mid+"\"}]";
+        String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?fk=" + fk + "&dk=[{\"DCK\":\""+docAN+"@"+docPIN+"@"+docPD+"\",\"MID\":\""+mid+"\"}]";
         System.out.println(dataUrl);
         return analog_landing.ConnectTheNet(dataUrl);
     }
