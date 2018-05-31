@@ -44,21 +44,19 @@ public class SearchApiController {
      * @return
      */
     @RequestMapping(value = "/getSearch", method = {GET, POST},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+            produces = "application/json;charset=utf-8")
     @ResponseBody
     public Object getUrl(@RequestParam() String searchStr,
                          @RequestParam() String dp,
                          @RequestParam(defaultValue = "10")String pn,
-                         @RequestParam(defaultValue = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT") String f1){
+                         @RequestParam(defaultValue = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT") String f1) throws UnsupportedEncodingException {
 
-        StringBuilder sb = null;
-        // 登陆 Url
         try {
             searchStr = URLEncoder.encode(searchStr,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String dataUrl = "http://172.21.201.131/search/pub/ApiSearch?dp=" + dp + "&pn=" + pn + "&fl=" + f1 + "&q=TI=" +searchStr;
+        String dataUrl = "http://172.21.201.131:8200/search?dp=" + dp + "&pn=" + pn + "&fl=" + f1 + "&q=" +searchStr;
 
         return analog_landing.ConnectTheNet(dataUrl);
     }

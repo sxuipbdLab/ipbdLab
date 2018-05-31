@@ -21,8 +21,7 @@ public class Analog_landing {
      * @param dataUrl
      * @return
      */
-    public static Object ConnectTheNet(String dataUrl){
-        System.out.println(dataUrl);
+    public static String ConnectTheNet(String dataUrl){
         StringBuilder sb = null;
 
         String loginUrl = "http://172.21.201.131/search/user/login";
@@ -51,18 +50,17 @@ public class Analog_landing {
             URL url = new URL(dataUrl);
             URLConnection conn = url.openConnection();
             conn.setRequestProperty("Cookie", tmpcookies.toString());
+            conn.setRequestProperty("Content-Type","application/json; charset=UTF-8");
             conn.setDoInput(true);
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
             sb = new StringBuilder();
             String line = null;
             while ((line = br.readLine()) != null) {
-                System.out.println("*****************************result*****************************\n" + line);
                 sb.append(line);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return sb;
+        return sb.toString();
     }
-
 }
