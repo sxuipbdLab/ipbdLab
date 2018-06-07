@@ -31,7 +31,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 
 @Controller
-@CrossOrigin(origins = "*",methods = {GET,POST})
+@CrossOrigin(origins = "*",methods = {GET,POST},maxAge=3600)
 public class SearchApiController {
     Analog_landing analog_landing = new Analog_landing();
 

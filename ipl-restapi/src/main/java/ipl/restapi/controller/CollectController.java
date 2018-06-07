@@ -25,14 +25,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @since api1.0
  */
 @Controller
-@CrossOrigin(origins = "*",methods = {GET,POST})
+@CrossOrigin(origins = "*",methods = {GET,POST},maxAge=3600)
 public class CollectController {
 
     @Autowired
     private CollectService collectService;
 
     // 可以匹配多个value,produces属性避免乱码
-    @RequestMapping(value = "/collects/{userId}", method = GET,
+    @RequestMapping(value = "/collects/{userId}", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
