@@ -6,6 +6,8 @@ import ipl.restapi.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>Descirption:</p>
  *
@@ -45,6 +47,12 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public void updateIndentityByIndentityDOWN(Short indentity){
         userInfoMapper.updateIdentityByIdentityDOWN(indentity);
+    }
+
+    @Override
+    public List<UserInfo> getAllUsers(){
+        List<UserInfo> userInfo = userInfoMapper.getAllUser();
+        return userInfo;
     }
 
 }

@@ -41,7 +41,7 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         // 此情况几乎不可能出现，所以没写入API接口文档
         if (email == null || password == null) {
             LOGGER.info("缺少信息{}", email);
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，必须提供用户邮箱和密码", true, "login", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，必须提供用户邮箱和密码", 1, "login", null));
         }
         UserInfoExample userInfoExample = new UserInfoExample();
         UserInfoExample.Criteria criteria = userInfoExample.createCriteria();
@@ -51,13 +51,13 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         if (list.size() != 1) {
             System.out.println("邮箱参数========：" + email);
             LOGGER.info("没有邮箱为：{}的用户", email);
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，无此邮箱", true, "login", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，无此邮箱", 1, "login", null));
         }
         UserInfo user = list.get(0);
         String requestPass = password.trim();
         // 接下来验证密码。md5算法。!DigestUtils.md5DigestAsHex(password.getBytes())
         if (!DigestUtils.md5DigestAsHex(requestPass.getBytes()).equals(user.getPassword())) {
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，用户密码不正确", true, "login", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("101", "登录失败，用户密码不正确", 1, "login", null));
         }
         user.setLastLoginTime(user.getLoginTime());
         /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -83,14 +83,14 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         //把用户数据保存在session域对象中
         session.setAttribute("sessionid", user.getId());
 
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "登录成功", false, "login", null));
+        return JacksonUtil.bean2Json(ResultFormat.build("100", "登录成功", 0, "login", null));
     }
 
     @Override
     public String createUser(UserInfo user) {
         // 此情况几乎不可能出现，所以没写入API接口文档
         if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
-            return JacksonUtil.bean2Json(ResultFormat.build("400", "username,email,password没有完整提供", true, "create", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("107", "username,email,password没有完整提供", 1, "register", null));
         }
 //        设置注册时间
         user.setRegistTime(new Date());
@@ -108,8 +108,8 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(StackTraceToString.getStackTraceString(e));
-            return JacksonUtil.bean2Json(ResultFormat.build("107", "注册失败，请联系站长", true, "register", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("107", "注册失败，请联系站长", 1, "register", null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("106", "注册成功", false, "register", null));
+        return JacksonUtil.bean2Json(ResultFormat.build("106", "注册成功", 0, "register", null));
     }
 }

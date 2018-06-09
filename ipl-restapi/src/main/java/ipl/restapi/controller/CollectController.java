@@ -43,11 +43,10 @@ public class CollectController {
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("901","返回收藏信息失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("901","返回收藏信息失败",1,"collect",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("902","返回收藏信息成功",true,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("902","返回收藏信息成功",0,"collect",collect));
     }
 
     @RequestMapping(value = "/collects/add/{userId}", method = {GET, POST},
@@ -65,17 +64,16 @@ public class CollectController {
             collectService.insertByuserId(coll);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("903","添加收藏失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("903","添加收藏失败",1,"collect",null));
         }
         List<Collect> collect;
         try{
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("904","添加收藏成功返回信息失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("904","添加收藏成功返回信息失败",1,"collect",null));
         }
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("905","添加收藏成功返回信息成功",true,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("905","添加收藏成功返回信息成功",0,"collect",collect));
     }
 
     @RequestMapping(value = "/collects/update/{userId}", method = {GET, POST},
@@ -93,7 +91,7 @@ public class CollectController {
             collectService.updateByUserIdAndDocId(coll);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("906","更新收藏失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("906","更新收藏失败",1,"collect",null));
         }
 
         List<Collect> collect;
@@ -101,10 +99,9 @@ public class CollectController {
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("907","更新收藏成功返回信息失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("907","更新收藏成功返回信息失败",1,"collect",null));
         }
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("908","更新收藏成功返回信息成功",true,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("908","更新收藏成功返回信息成功",0,"collect",collect));
     }
 
     @RequestMapping(value = "/collects/delete/{userId}/{docId}", method = {GET, POST},
@@ -120,7 +117,7 @@ public class CollectController {
             collectService.delByPK(coll);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("909","删除收藏信息失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("909","删除收藏信息失败",1,"collect",null));
         }
 
         List<Collect> collect;
@@ -128,9 +125,9 @@ public class CollectController {
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("910","删除收藏信息成功返回信息失败",true,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("910","删除收藏信息成功返回信息失败",1,"collect",null));
         }
-        String data = JacksonUtil.bean2Json(collect);
-        return JacksonUtil.bean2Json(ResultFormat.build("911","删除收藏信息成功返回信息成功",true,"collect",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("911","删除收藏信息成功返回信息成功",0,"collect",collect));
     }
+
 }

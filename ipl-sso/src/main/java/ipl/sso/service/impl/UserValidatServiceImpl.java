@@ -59,11 +59,11 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
 
         List<UserInfo> list = userInfoMapper.selectByExample(example);
         if (list == null || list.size() == 0) {
-            return JacksonUtil.bean2Json(ResultFormat.build("104", msg + validateValue + "可用", false, "check", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("104", msg + validateValue + "可用", 0, "check", null));
         } else {
             LOGGER.info(msg + validateValue + "已经存在");
             // 数据不可用【405 (SC_METHOD_NOT_ALLOWED)指出请求方法(GET, POST, HEAD, PUT, DELETE, 等)对某些特定的资源不允许使用。该状态码是新加入 HTTP 1.1中的。】
-            return JacksonUtil.bean2Json(ResultFormat.build("105", msg + validateValue + "已被使用", true, "check", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("105", msg + validateValue + "已被使用", 1, "check", null));
         }
     }
 }

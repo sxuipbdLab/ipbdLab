@@ -15,7 +15,7 @@ public interface MyInfoService {
     /**
      * 通过token解析出用户的email信息，再根据用户email查询User所有数据的接口
      *
-     * @param uemail 用户email
+     * @param id 用户email
      * @return 用户
      */
     UserInfo getUserInfoById(long id);

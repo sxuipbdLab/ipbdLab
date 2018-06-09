@@ -100,4 +100,6 @@ public interface UserInfoMapper {
     void updateIdentityByIdentityUP(Short identity);
 
     void updateIdentityByIdentityDOWN(Short identity);
+
+    List<UserInfo> getAllUser();
 }
