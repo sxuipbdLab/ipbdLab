@@ -27,7 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @since api1.0
  */
 @Controller
-@CrossOrigin(origins = "*",methods = {GET,POST})
+@CrossOrigin(origins = "*",methods = {GET,POST},maxAge=3600)
 public class RoleController {
     @Autowired
     private RoleService roleService;
@@ -37,7 +37,7 @@ public class RoleController {
     private RoleSearchService roleSearchService;
 
     // 可以匹配多个value,produces属性避免乱码
-    @RequestMapping(value = "/roles/all", method = GET,
+    @RequestMapping(value = "/roles/all", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
@@ -55,15 +55,16 @@ public class RoleController {
     }
 
     // 可以匹配多个value,produces属性避免乱码
-    @RequestMapping(value = "/roles/{roleId}", method = GET,
+    @RequestMapping(value = "/roles", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
-    public String getRoleByIdJson(@PathVariable Short roleId) {
+    public String getRoleByIdJson(@RequestParam String roleId) {
         Role role;
+        Short rId = new Short(roleId);
         try{
             //得到角色信息
-            role = roleService.getRoleById(roleId);
+            role = roleService.getRoleById(rId);
         }catch(Exception e){
             e.printStackTrace();
             return JacksonUtil.bean2Json(ResultFormat.build("202","返回数据失败",1,"role",null));
@@ -72,7 +73,7 @@ public class RoleController {
     }
 
     // 可以匹配多个value,produces属性避免乱码
-    @RequestMapping(value = "/roles/delete/{roleId}", method = GET,
+    @RequestMapping(value = "/roles/delete/{roleId}", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数

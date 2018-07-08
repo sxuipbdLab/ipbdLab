@@ -27,13 +27,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @since api1.0
  */
 @Controller
-@CrossOrigin(origins = "*",methods = {GET,POST})
+@CrossOrigin(origins = "*",methods = {GET,POST},maxAge=3600)
 public class FootprintController {
 
     @Autowired
     private FootprintService footprintService;
 
-    @RequestMapping(value = "/footprint/{userId}", method = GET,
+    @RequestMapping(value = "/footprint/{userId}", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public Object getAllFootprint(@PathVariable Long userId){

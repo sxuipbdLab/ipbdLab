@@ -7,12 +7,12 @@ import ipl.restapi.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * <p>Descirption:</p>
@@ -24,12 +24,13 @@ import java.util.List;
  * @since api1.0
  */
 @Controller
+@CrossOrigin(origins = "*",methods = {GET,POST},maxAge=3600)
 public class UserController {
     @Autowired
     private UsersService usersService;
 
     // 可以匹配多个value,produces属性避免乱码
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET,
+    @RequestMapping(value = "/users/{userId}", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
@@ -40,7 +41,7 @@ public class UserController {
         return userJson;
     }
 
-    @RequestMapping(value = "/users/all", method = RequestMethod.GET,
+    @RequestMapping(value = "/users/all", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
