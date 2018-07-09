@@ -120,21 +120,4 @@ public class GetAllData {
         // TODO:拒绝参数为null
         return Analog_landing.ConnectTheNet(dataUrl);
     }
-
-    public static void main(String[] args) throws JSONException {
-        GetAllData gAlDt = new GetAllData();
-        String dataRange = gAlDt.structureDataRange(2017, 12, 14, 2017, 12, 15);
-        int FOUNDNUM = gAlDt.count(gAlDt.search(dataRange, 1));
-        System.out.println("size  " + FOUNDNUM);
-        // 分了多少页，就执行多少次2、3、4
-        // TODO:是否需要向上取整
-        for (int j = 0; j < FOUNDNUM / GetAllData.PER_PAGE_NUM; j++) {
-            String jsonStr = gAlDt.search(dataRange, j);
-            // TODO:该jsonStr需要被解析传入kafka，然后导入HDFS
-            gAlDt.parseJsonPrepareForFullText(jsonStr,j);
-            System.out.println(keyWordList.length);
-//            System.out.println(gAlDt.getFullText(keyWordList[10]));
-        }
-        System.out.println(gAlDt.getFullText(keyWordList[10]));
-    }
 }
