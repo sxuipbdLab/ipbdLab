@@ -95,7 +95,11 @@ public interface UserInfoMapper {
      */
     int updateByPrimaryKey(UserInfo record);
 
+    void loginUpdate(UserInfo user);
+
     void updateIdentityByIdentityUP(Short identity);
 
     void updateIdentityByIdentityDOWN(Short identity);
+
+    List<UserInfo> getAllUser();
 }

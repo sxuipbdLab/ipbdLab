@@ -406,4 +406,14 @@
         identity = #{identity,jdbcType=SMALLINT}
         where id = #{id,jdbcType=BIGINT}
     </update>
+    <update id = "loginUpdate" parameterType="ipl.manager.pojo.UserInfo" >
+        update user_info
+        set login_time = #{loginTime,jdbcType=TIMESTAMP},
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+        login_count = #{loginCount,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="getAllUser" resultMap="BaseResultMap">
+        SELECT * FROM user_info
+    </select>
 </mapper>

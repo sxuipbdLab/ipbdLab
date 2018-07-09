@@ -2,6 +2,7 @@ package ipl.sso.service;
 
 import ipl.manager.pojo.UserInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since api1.0
  */
 public interface UserLoginRegistService {
-    String userLogin(String email, String password, HttpServletResponse response);
+    String userLogin(String email, String password, HttpServletRequest request, HttpServletResponse response);
 
     String createUser(UserInfo user);
 }

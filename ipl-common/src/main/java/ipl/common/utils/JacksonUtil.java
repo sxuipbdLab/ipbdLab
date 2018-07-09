@@ -21,6 +21,7 @@ public class JacksonUtil {
     /**
      * 将对象转换成json字符串
      *
+     *
      * @param obj 需要转换的对象
      * @return 该对象对应的Json格式数据
      * @throws IOException
