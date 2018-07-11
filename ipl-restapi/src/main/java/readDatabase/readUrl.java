@@ -28,8 +28,8 @@ public class readUrl {
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    static int beginData[] = new int[]{2014,6,1};
-    static int endData[] = new int[]{2014,6,1};
+    static int beginData[] = new int[]{2004,12,1};
+    static int endData[] = new int[]{2004,12,1};
 
     String first = beginData[0] + "-" + beginData[1] + "-" + beginData[2];
     String second = endData[0] + "-" + endData[1] + "-" + endData[2];
@@ -146,6 +146,10 @@ public class readUrl {
         return size;
     }
 
+    /**
+     * 获取全文
+     * @param keyword 检索全文所需要的关键字
+     */
     public static void getFullText(String keyword[]){
         String fk = "TI,AB,CLM,FT,PA,IPC,AN,PN,AU,AD,PD,PR,ADDR,PC,AGC,AGT,QWFT,PCTF,IAN,IPN";
         String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?fk=" + fk + "&dk=[{\"DCK\":\""+keyword[1]+"@"+keyword[0]+"@"+keyword[2]+"\",\"MID\":\""+keyword[3]+"\"}]";
@@ -153,15 +157,16 @@ public class readUrl {
     }
 
     public static void main(String[] args) throws JSONException {
+        //获得总条目数
         int FOUNDNUM = createDate(1);
         System.out.println("size  " + FOUNDNUM);
-        for(int j = 1;j < FOUNDNUM;j++){
+        for(int j = 1;j < 1;j++){
             createDate(j+1);
         }
 
         System.out.println("keywordLength  " + keyWordList.length);
 
-        for(int i = 0; i < FOUNDNUM;i++){
+        for(int i = 0; i < 1;i++){
             getFullText(keyWordList[i]);
         }
     }

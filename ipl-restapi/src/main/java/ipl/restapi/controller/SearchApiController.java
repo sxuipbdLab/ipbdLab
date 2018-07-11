@@ -1,8 +1,10 @@
 package ipl.restapi.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import net.dongliu.requests.Requests;
 import net.dongliu.requests.Response;
 import net.dongliu.requests.Session;
+import org.json.JSONException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,7 +51,7 @@ public class SearchApiController {
     public Object getUrl(@RequestParam() String searchStr,
                          @RequestParam() String dp,
                          @RequestParam(defaultValue = "10")String pn,
-                         @RequestParam(defaultValue = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT") String f1) throws UnsupportedEncodingException {
+                         @RequestParam(defaultValue = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT") String f1) throws UnsupportedEncodingException, JSONException {
 
         try {
             searchStr = URLEncoder.encode(searchStr,"UTF-8");
@@ -58,7 +60,10 @@ public class SearchApiController {
         }
         String dataUrl = "http://172.21.201.131:8200/search?dp=" + dp + "&pn=" + pn + "&fl=" + f1 + "&q=" +searchStr;
 
-        return analog_landing.ConnectTheNet(dataUrl);
+        JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
+        json.put("dp",dp);
+        json.put("status",100);
+        return json;
     }
 
     /**
@@ -80,8 +85,9 @@ public class SearchApiController {
                               @RequestParam(defaultValue = "TI,AB,CLM,FT,PA,IPC,AN,PN,AU,AD,PD,PR,ADDR,PC,AGC,AGT,QWFT,PCTF,IAN,IPN") String fk){
 
         String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?fk=" + fk + "&dk=[{\"DCK\":\""+docAN+"@"+docPIN+"@"+docPD+"\",\"MID\":\""+mid+"\"}]";
-        System.out.println(dataUrl);
-        return analog_landing.ConnectTheNet(dataUrl);
+        JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
+        json.put("status",100);
+        return json;
     }
 
     /**

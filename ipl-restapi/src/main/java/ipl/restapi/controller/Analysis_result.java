@@ -1,5 +1,6 @@
 package ipl.restapi.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,8 @@ public class Analysis_result{
         }
         String dataUrl = "http://172.21.201.131/search/pub/ApiAnalyse?sdf0=" + field + "&dp=" + dp + "&pn=" + pn + "&q=" + searchStr;
 
-        return analog_landing.ConnectTheNet(dataUrl);
+        JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
+        json.put("status",100);
+        return json;
     }
 }

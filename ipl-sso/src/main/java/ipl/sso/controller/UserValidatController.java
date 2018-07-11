@@ -37,11 +37,11 @@ public class UserValidatController {
 
         //参数有效性校验
         if (StringUtils.isBlank(param) || type.toString() == null) {
-            result = JacksonUtil.bean2Json(ResultFormat.build("105", "校验值/检验类型不能为空", 1, "check", null));
+            result = JacksonUtil.bean2Json(ResultFormat.build("101", "校验值/检验类型不能为空", 1, "check", null));
         }
         // 暂时去掉： type != UserValidatiEnum.USER_PHONE.getType() &&
         if (type != UserValidatiEnum.USER_NAME.getType() && type != UserValidatiEnum.USER_EMAIL.getType()) {
-            result = JacksonUtil.bean2Json(ResultFormat.build("105", "校验值的类型错误,1-username;3-email", 1, "check", null));
+            result = JacksonUtil.bean2Json(ResultFormat.build("101", "校验值的类型错误,1-username;3-email", 1, "check", null));
         }
         // 如果此时result中就已经有值，那么校验出错,不再调用服务。
         if (null != result) {
@@ -54,7 +54,7 @@ public class UserValidatController {
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(StackTraceToString.getStackTraceString(e));
-            result = JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", 1, "check", null));
+            result = JacksonUtil.bean2Json(ResultFormat.build("101", "服务器维护，请联系站长", 1, "check", null));
         }
         return result;
     }
