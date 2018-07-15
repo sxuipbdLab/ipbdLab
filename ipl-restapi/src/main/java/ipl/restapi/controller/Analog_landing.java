@@ -1,13 +1,17 @@
 package ipl.restapi.controller;
 
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -62,5 +66,29 @@ public class Analog_landing {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    public static String exeCommand(String host, String password, String command) throws JSchException, IOException {
+
+        JSch jsch = new JSch();
+        Session session = jsch.getSession("root", host, 22);
+        session.setConfig("StrictHostKeyChecking", "no");
+        //    java.util.Properties config = new java.util.Properties();
+        //   config.put("StrictHostKeyChecking", "no");
+
+        session.setPassword(password);
+        session.connect();
+
+        ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
+        InputStream in = channelExec.getInputStream();
+        channelExec.setCommand(command);
+        channelExec.setErrStream(System.err);
+        channelExec.connect();
+        String out = IOUtils.toString(in, "UTF-8");
+
+        channelExec.disconnect();
+        session.disconnect();
+
+        return out;
     }
 }

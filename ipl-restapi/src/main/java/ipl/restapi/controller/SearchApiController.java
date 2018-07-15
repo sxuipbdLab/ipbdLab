@@ -1,6 +1,9 @@
 package ipl.restapi.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jcraft.jsch.JSchException;
+import ipl.common.utils.JacksonUtil;
+import ipl.common.utils.ResultFormat;
 import net.dongliu.requests.Requests;
 import net.dongliu.requests.Response;
 import net.dongliu.requests.Session;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -88,6 +92,31 @@ public class SearchApiController {
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
         json.put("status",100);
         return json;
+    }
+
+
+    @RequestMapping(value = "/getPDF",method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public Object getPdf(@RequestParam() String docPIN,
+                         @RequestParam() String docAN,
+                         @RequestParam() String docPD) throws IOException, JSchException {
+        String dockey_pdf = null;
+
+        String shell = "/root/install/tool/dbclient -b meta -d " + docAN + "@" + docPIN + "@" + docPD + " -p 8001 -H localhost -o VIEW -f PDF";
+        System.out.println(shell);
+        String result = analog_landing.exeCommand("172.21.201.131","dfld2014",shell);
+        String pattern = "(?<=PDF:PDF:).*?(?=:)";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(result);
+        if(m.find()){
+            dockey_pdf = m.group();
+            System.out.println(dockey_pdf);
+            String url = "http://172.21.201.131/search/detail/getpdf?pdf=" + dockey_pdf;
+            //String url = "http://172.21.201.131/search/pub/ApiGetfile?un=103&dk=" + dockey_pdf;
+            return JacksonUtil.bean2Json(ResultFormat.build("100","获取pdf链接成功",1,"pdf",url));
+        }
+        return JacksonUtil.bean2Json(ResultFormat.build("101","获取pdf链接失败",1,"footprint",null));
     }
 
     /**
