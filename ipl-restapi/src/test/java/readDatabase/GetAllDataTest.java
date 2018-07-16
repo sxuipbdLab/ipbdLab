@@ -1,8 +1,11 @@
 package readDatabase;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+
+import java.util.ArrayList;
 
 /**
  * GetAllData Tester.
@@ -12,9 +15,11 @@ import org.junit.After;
  * @since <pre>07/09/2018</pre>
  */
 public class GetAllDataTest {
+    GetAllData getAllData = new GetAllData();
 
     @Before
     public void before() throws Exception {
+        System.out.println("开始数据获取测试！");
     }
 
     @After
@@ -34,7 +39,7 @@ public class GetAllDataTest {
      */
     @Test
     public void testSearch() throws Exception {
-//TODO:
+        System.out.println(getAllData.search(getAllData.structureDataRange(2017, 11, 21, 2017, 11, 22), 1));
     }
 
     /**
@@ -58,7 +63,9 @@ public class GetAllDataTest {
      */
     @Test
     public void testStructureDataRange() throws Exception {
-//TODO:
+        Assert.assertEquals("((AD>=20171121) AND (AD<=20171122))", getAllData.structureDataRange(2017, 11, 21, 2017, 11, 22));
+        Assert.assertEquals("((AD>=20171121) AND (AD<=20171221))", getAllData.structureDataRange(2017, 11, 21));
+        // TODO:测试错误时间
     }
 
     /**
@@ -66,23 +73,35 @@ public class GetAllDataTest {
      */
     @Test
     public void testGetFullText() throws Exception {
-//TODO:
-    }
-    /*public static void main(String[] args) throws JSONException {
-        GetAllData gAlDt = new GetAllData();
-        String dataRange = gAlDt.structureDataRange(2017, 12, 14, 2017, 12, 15);
-        int FOUNDNUM = gAlDt.count(gAlDt.search(dataRange, 1));
+
+        String dataRange = getAllData.structureDataRange(2017, 10, 14, 2017, 10, 15);
+        int FOUNDNUM = getAllData.count(getAllData.search(dataRange, 1));
+        // 检索到多少条数据（非全文）
         System.out.println("size  " + FOUNDNUM);
         // 分了多少页，就执行多少次2、3、4
-        // TODO:是否需要向上取整
-        for (int j = 0; j < FOUNDNUM / GetAllData.PER_PAGE_NUM; j++) {
-            String jsonStr = gAlDt.search(dataRange, j);
-            // TODO:该jsonStr需要被解析传入kafka，然后导入HDFS
-            gAlDt.parseJsonPrepareForFullText(jsonStr,j);
-            System.out.println(keyWordList.length);
-//            System.out.println(gAlDt.getFullText(keyWordList[10]));
+        // 页数向上取整，TODO：解决只有docid有值的哪些得分末尾的数据
+//        if (FOUNDNUM == 0) {
+//            // TODO:打日志，并结束本次检索
+//        }
+        int forControl = FOUNDNUM % GetAllData.PER_PAGE_NUM == 0 ? FOUNDNUM / GetAllData.PER_PAGE_NUM : FOUNDNUM / GetAllData.PER_PAGE_NUM + 1;
+        for (int j = 1; j <= forControl; j++) {
+            System.out.println(11111);
+            // 获取第dp页检索数据
+            String jsonStr = getAllData.search(dataRange, j);
+            System.out.println(jsonStr);
+            // 解析jsonStr获得参数列表
+            ArrayList<String[]> keyWordList;
+            // 遍历参数列表，存储并且请求全文数据
+            keyWordList = getAllData.parseJsonPrepareForFullText(jsonStr);
+            System.out.println(keyWordList.size());
+            for (String[] keywords : keyWordList) {
+                // 请求全文,TODO：存储逻辑
+                System.out.println(getAllData.getFullText(keywords));
+                for (String words : keywords) {
+                    System.out.println("===" + words);
+                }
+            }
         }
-        System.out.println(gAlDt.getFullText(keyWordList[10]));
-    }*/
+    }
 
 } 

@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p> Desciption
@@ -29,17 +28,11 @@ import java.util.List;
  * @date 2018/7/7 11:34
  * @date 2018/7/8 19:50
  * @since api1.0
+ * TODO:增加一个解析函数，因为search()返回的数据的所有字段，也都应该存储。
  */
 public class GetAllData {
-    private static final String I_WANT_THIS_FIELDS = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT";
-    private static final int PER_PAGE_NUM = 50;
-    /**
-     * 用来存放PN，AN，PD，MID,在获取全文数据时使用
-     * TODO：换数据结构(无限扩容的),避免溢出
-     */
-    static String[][] keyWordList = new String[100000][4];
-    // List<String[]> list = new ArrayList<>();
-
+    private static final String I_NEED_THIS_FIELDS = "TI,AB,PA,LS,AN,PN,AD,PD,ZYFT";
+    static final int PER_PAGE_NUM = 50;
     /**
      * 计算两个日期之间的天数
      *
@@ -57,11 +50,11 @@ public class GetAllData {
      *
      * @param dataRange 检索数据的时间段
      * @param dp        页码
+     * TODO：解决连接超时
      */
     public String search(String dataRange, int dp) {
-
         /*
-         * 更换检索串编码
+         * 检索串编码
          */
         try {
             dataRange = URLEncoder.encode(dataRange, "UTF-8");
@@ -69,29 +62,36 @@ public class GetAllData {
             e.printStackTrace();
         }
 
-        String searchUrl = "http://172.21.201.131:8200/search?dp=" + dp + "&pn=" + PER_PAGE_NUM + "&fl=" + I_WANT_THIS_FIELDS + "&q=" + dataRange;
+        String searchUrl = "http://172.21.201.131:8200/search?dp=" + dp + "&pn=" + PER_PAGE_NUM + "&fl=" + I_NEED_THIS_FIELDS + "&q=" + dataRange;
         System.out.println(searchUrl);
+        // TODO：简单计算下大小，以及StringBuilder的容量上限（网友说由内存定，所以pagenum可以大一些，测试吞吐量再定）。
         return Analog_landing.ConnectTheNet(searchUrl);
     }
 
     /**
      * 解析JSON串
+     * @param jsonStr serch()中所检索出来的数据
      */
-    public void parseJsonPrepareForFullText(String jsonStr, int dp) throws JSONException {
-        // jsonStr中，第m条数据
-        int m = (dp - 1) * GetAllData.PER_PAGE_NUM;
+    public ArrayList<String[]> parseJsonPrepareForFullText(String jsonStr) throws JSONException {
+        /**
+         * 用来存放PN，AN，PD，MID,在获取全文数据时使用
+         * 换数据结构(无限扩容),避免溢出
+         */
+        ArrayList<String[]> keyWordList = new ArrayList<>();
         JSONObject jsonData;
         JSONObject jsonObject = new JSONObject(jsonStr);
         JSONArray object = jsonObject.getJSONArray("RESULT");
         for (int i = 0; i < object.length(); i++) {
-            System.out.println("====" + object.length());
-            m += i;
+            String[] keywords = new String[4];
+            // System.out.println("====" + object.length());
             jsonData = object.getJSONObject(i);
-            keyWordList[m][0] = jsonData.getString("PN");
-            keyWordList[m][1] = jsonData.getString("AN");
-            keyWordList[m][2] = jsonData.getString("PD");
-            keyWordList[m][3] = jsonData.getString("mid");
+            keywords[0] = jsonData.getString("PN");
+            keywords[1] = jsonData.getString("AN");
+            keywords[2] = jsonData.getString("PD");
+            keywords[3] = jsonData.getString("mid");
+            keyWordList.add(keywords);
         }
+        return keyWordList;
     }
 
     public int count(String jsonStr) throws JSONException {
@@ -105,10 +105,18 @@ public class GetAllData {
      */
     public String structureDataRange(int... args) throws JSONException {
         // 需要配置JVM参数：-ea
-        assert (args.length == 6) : "期望获得6个时间参数，实际获得：\t" + args.length;
+        assert (args.length == 6 || args.length == 3) : "期望获得6个或3个时间参数，实际获得：\t" + args.length;
 
         LocalDate start = new LocalDate(args[0], args[1], args[2]);
-        LocalDate end = new LocalDate(args[3], args[4], args[5]);
+        LocalDate end;
+        if (args.length == 3) {
+            // 默认一次调取一个月的数据
+            end = start.plusMonths(1);
+        } else {
+            end = new LocalDate(args[3], args[4], args[5]);
+        }
+        // TODO,保证end在start之后
+//        if (end)
 
         return "((AD>=" + start.toString().replaceAll("-", "") + ") AND (AD<=" + end.toString().replaceAll("-", "") + "))";
     }

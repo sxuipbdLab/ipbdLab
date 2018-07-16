@@ -66,4 +66,9 @@ public class UserValidatServiceImpl implements UserValidatService, Serializable 
             return JacksonUtil.bean2Json(ResultFormat.build("105", msg + validateValue + "已被使用", 1, "check", null));
         }
     }
+//    public static void main(String[] args) {
+//        UserValidatServiceImpl u = new UserValidatServiceImpl();
+//        UserInfo userInfo = new UserInfo();
+//        u.validateUserInfo("a",1);
+//    }
 }
