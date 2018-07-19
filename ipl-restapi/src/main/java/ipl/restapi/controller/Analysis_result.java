@@ -1,11 +1,15 @@
 package ipl.restapi.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import ipl.common.utils.JacksonUtil;
+import ipl.common.utils.ResultFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -30,6 +34,7 @@ public class Analysis_result{
      * @param field 分析关键词
      * @return
      */
+    //这个接口用来做条件过滤
     @RequestMapping(value = "/Analysis", method = {GET, POST},
             produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -45,6 +50,32 @@ public class Analysis_result{
         }
         String dataUrl = "http://172.21.201.131/search/pub/ApiAnalyse?sdf0=" + field + "&dp=" + dp + "&pn=" + pn + "&q=" + searchStr;
 
-        return analog_landing.ConnectTheNet(dataUrl);
+        JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
+        json.put("status",100);
+        return json;
+    }
+    //这个接口用来做分析统计，由用户触发，需要登录
+    @RequestMapping(value = "/AnalysisByUser", method = {GET, POST},
+            produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Object getUrlByUser(@RequestParam() String searchStr,
+                         @RequestParam(defaultValue = "1") String dp,
+                         @RequestParam(defaultValue = "10")String pn,
+                         @RequestParam() String field,HttpServletRequest request) {
+
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回分析结果失败,未登录不能进行此项业务",1,"collect",null));
+        }
+        try {
+            searchStr = URLEncoder.encode(searchStr,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String dataUrl = "http://172.21.201.131/search/pub/ApiAnalyse?sdf0=" + field + "&dp=" + dp + "&pn=" + pn + "&q=" + searchStr;
+
+        JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
+        json.put("status",100);
+        return json;
     }
 }
