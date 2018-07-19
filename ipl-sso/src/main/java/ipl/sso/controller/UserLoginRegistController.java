@@ -45,7 +45,7 @@ public class UserLoginRegistController {
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info(StackTraceToString.getStackTraceString(e));
-            return JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", 1, "login", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "服务器维护，请联系站长", 1, "login", null));
         }
     }
 
@@ -59,7 +59,7 @@ public class UserLoginRegistController {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("500", "服务器维护，请联系站长", 1, "register", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "服务器维护，请联系站长", 1, "register", null));
         }
     }
 }
