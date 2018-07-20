@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,8 +28,8 @@ public class readUrl {
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    static int beginData[] = new int[]{2004,12,1};
-    static int endData[] = new int[]{2004,12,1};
+    static int beginData[] = new int[]{2016,1,1};
+    static int endData[] = new int[]{2016,1,31};
 
     String first = beginData[0] + "-" + beginData[1] + "-" + beginData[2];
     String second = endData[0] + "-" + endData[1] + "-" + endData[2];
@@ -50,24 +50,7 @@ public class readUrl {
     /**
      * 用来存放PN，AN，PD，MID
      */
-    static String[][] keyWordList = new String[100000][4];
-
-    /**
-     * 计算两个日期之间的天数
-     * @param date1
-     * @param date2
-     * @return
-     */
-    public static int daysBetween(Date date1,Date date2){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date1);
-        long time1 = cal.getTimeInMillis();
-        cal.setTime(date2);
-        long time2 = cal.getTimeInMillis();
-        long between_days=(time2-time1)/(1000*3600*24);
-
-        return Integer.parseInt(String.valueOf(between_days));
-    }
+    static String[][] keyWordList = new String[250000][4];
 
     /**
      * 检索
@@ -110,7 +93,6 @@ public class readUrl {
             keyWordList[m][3] = json_Data.getString("mid");
             m++;
         }
-
         return size;
     }
     /**
@@ -150,24 +132,44 @@ public class readUrl {
      * 获取全文
      * @param keyword 检索全文所需要的关键字
      */
-    public static void getFullText(String keyword[]){
-        String fk = "TI,AB,CLM,FT,PA,IPC,AN,PN,AU,AD,PD,PR,ADDR,PC,AGC,AGT,QWFT,PCTF,IAN,IPN";
+    public static void getFullText(String keyword[]) throws IOException {
+        String filePath = "H://result.txt";
+        String fk = "TI,AB,CLM,FT,PA,IPC,LS,LSE,AN,PN,UPC,USPC,ECLA,JPC,DC,AU,AD,PD,PR,ADDR,PC,CNLX,CTN,AGC,AGT,LSD,CDN,CTD,CDD,PFD,PF,ZYFT,QWFT,LSO,LSR,YXZT,WXZT,ZSZT,PCTF,IAN,IPN,XGD,CLMD";
         String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?fk=" + fk + "&dk=[{\"DCK\":\""+keyword[1]+"@"+keyword[0]+"@"+keyword[2]+"\",\"MID\":\""+keyword[3]+"\"}]";
-        System.out.println(analog_landing.ConnectTheNet(dataUrl));
+
+//        System.out.println(analog_landing.ConnectTheNet(dataUrl));
+        File file = new File(filePath);
+        PrintStream ps = new PrintStream(new FileOutputStream(file));
+        ps.println(analog_landing.ConnectTheNet(dataUrl));
     }
 
-    public static void main(String[] args) throws JSONException {
+    public static void main(String[] args) throws JSONException, IOException {
+        System.out.println("begin...");
+
+        long startTime = System.currentTimeMillis();
         //获得总条目数
         int FOUNDNUM = createDate(1);
         System.out.println("size  " + FOUNDNUM);
-        for(int j = 1;j < 1;j++){
+        System.out.println("create keyWordList...");
+        for(int j = 1;j < FOUNDNUM/10;j++){
             createDate(j+1);
         }
 
         System.out.println("keywordLength  " + keyWordList.length);
-
-        for(int i = 0; i < 1;i++){
-            getFullText(keyWordList[i]);
+        int count = 0;
+        System.out.println("outPutToFile...");
+        for(int i = 0; i < FOUNDNUM;i++){
+            try {
+                getFullText(keyWordList[i]);
+            } catch (IOException e) {
+                System.out.println(keyWordList[i]);
+                e.printStackTrace();
+            }
+            count++;
         }
+        System.out.println("Foundnum  " + FOUNDNUM);
+        System.out.println("Count  " + count);
+        long endTime = System.currentTimeMillis();
+        System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
     }
 }

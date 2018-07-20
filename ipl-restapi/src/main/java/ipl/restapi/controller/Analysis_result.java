@@ -48,6 +48,7 @@ public class Analysis_result{
 
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
         json.put("status",100);
+        json.put("dp",dp);
         return json;
     }
 }
