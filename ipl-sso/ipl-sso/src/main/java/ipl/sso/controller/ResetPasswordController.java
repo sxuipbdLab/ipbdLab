@@ -41,7 +41,7 @@ public class ResetPasswordController{
         List<UserInfo> list = userInfoMapper.selectByExample(userInfoExample);
         //查找失败,无此用户
         if (list.size() != 1){
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "重置密码失败，无此邮箱", 1, "resetPassword", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "重置密码失败，无此邮箱", 1, "resetPassword", null));
         }
         //查找成功，获得用户对象
         UserInfo user = list.get(0);
@@ -49,7 +49,7 @@ public class ResetPasswordController{
         user.setPassword(newpassword);
         //更新用户
         userInfoMapper.updateByPrimaryKeySelective(user);
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "重置密码成功", 0, "resetPassword", null));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "重置密码成功", 0, "resetPassword", null));
 
     }
 }
