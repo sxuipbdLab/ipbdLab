@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
          * @throws MessagingException
          * @throws AddressException
          */
-        @RequestMapping(value = "/sendMail", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+        @RequestMapping(value = "/sendMail", method = {RequestMethod.GET,RequestMethod.POST}, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
         @ResponseBody
         public String SendJavaMail(@RequestParam(value = "email") String email, HttpServletRequest request, HttpServletResponse response) throws Exception{
             try {
@@ -52,34 +52,28 @@ import javax.servlet.http.HttpServletResponse;
                 Properties props = new Properties();
                 props.put("mail.smtp.host", "smtp.qq.com");//指定邮件的发送服务器地址,改用qq
                 props.put("mail.smtp.auth", "true");//服务器是否要验证用户的身份信息
-
-                Session session = Session.getInstance(props);//得到Session
+                Session session = Session.getInstance(props);
                 session.setDebug(true);//代表启用debug模式，可以在控制台输出smtp协议应答的过程
-
 
                 //创建一个MimeMessage格式的邮件
                 MimeMessage message = new MimeMessage(session);
-
                 //设置发送者
                 Address fromAddress = new InternetAddress("649568285@qq.com");//邮件地址
                 message.setFrom(fromAddress);//设置发送的邮件地址
                 //设置接收者
                 Address toAddress = new InternetAddress(email);//要接收邮件的邮箱
                 message.setRecipient(RecipientType.TO, toAddress);//设置接收者的地址
-
                 //设置邮件的主题
                 message.setSubject("您的验证码");
                 //设置邮件的内容
                 message.setText(number);
                 //保存邮件
                 message.saveChanges();
-
-
                 //得到发送邮件的服务器(这里用的是smtp服务器)
                 Transport transport = session.getTransport("smtp");
 
                 //发送者的账号连接到smtp，用qq服务器
-                transport.connect("smtp.qq.com", "649568285@qq.com", "nmecwkurhyzzbdag");
+                transport.connect("smtp.qq.com", "649568285@qq.com", "tzidpexbxmvebbhb");
                 //发送信息
                 transport.sendMessage(message, message.getAllRecipients());
                 //关闭服务器通道
@@ -94,14 +88,13 @@ import javax.servlet.http.HttpServletResponse;
         }
     @RequestMapping(value = "/TestMail", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public String TestJavaMail(@RequestParam(value ="number") String number,HttpServletRequest request, HttpServletResponse response) throws Exception{
-
-        String sessionCacheData = (String) request.getSession().getAttribute("sessionCacheData");
-        request.getSession().removeAttribute("sessionCacheData");
-        if (number.equals(sessionCacheData)){
-            return JacksonUtil.bean2Json(ResultFormat.build("1", "验证码匹配成功", 1, "testnumber",null));
-        }else{
-            return JacksonUtil.bean2Json(ResultFormat.build("0","验证码匹配失败", 0, "testnumber",null));
+        public String TestJavaMail(@RequestParam(value ="number") String number,HttpServletRequest request, HttpServletResponse response) throws Exception{
+            String sessionCacheData = (String) request.getSession().getAttribute("sessionCacheData");
+            if (number.equals(sessionCacheData)){
+                request.getSession().removeAttribute("sessionCacheData");
+                return JacksonUtil.bean2Json(ResultFormat.build("1", "验证码匹配成功", 1, "testnumber",null));
+            }else{
+                return JacksonUtil.bean2Json(ResultFormat.build("0","验证码匹配失败", 0, "testnumber",null));
+            }
         }
-    }
 }

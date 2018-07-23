@@ -50,10 +50,11 @@
             <artifactId>javax.servlet.jsp-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>javax.mail-api</artifactId>
-            <version>1.6.0</version>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>10.0-b28</version>
         </dependency>
+
         <dependency>
             <groupId>activation</groupId>
             <artifactId>activation</artifactId>

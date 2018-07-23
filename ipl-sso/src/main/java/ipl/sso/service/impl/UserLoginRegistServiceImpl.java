@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -82,6 +83,9 @@ public class UserLoginRegistServiceImpl implements UserLoginRegistService {
         HttpSession session = request.getSession();
         //把用户数据保存在session域对象中
         session.setAttribute("sessionid", user.getId());
+        session.setMaxInactiveInterval(6565);
+        ServletContext ContextA =request.getSession().getServletContext();
+        ContextA.setAttribute("session", request.getSession());
 
         return JacksonUtil.bean2Json(ResultFormat.build("1", "登录成功", 0, "login", null));
     }

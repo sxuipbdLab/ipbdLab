@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,14 +49,23 @@ public class UserLoginRegistController {
     // 用户注册[不允许GET方法]
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public String createUser(UserInfo user) {
+    public String createUser(UserInfo user, @RequestParam(value = "number")String number,HttpServletRequest request) {
 //        System.out.println("接收到：\n" + JacksonUtil.bean2Json(user));
-        try {
-            String result = userService.createUser(user);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("0", "服务器维护，请联系站长", 1, "register", null));
+        String sessionCacheData = (String) request.getSession().getAttribute("sessionCacheData");
+
+        if (number.equals(sessionCacheData)){
+            //return JacksonUtil.bean2Json(ResultFormat.build("1", "验证码匹配成功", 1, "testnumber",null));
+            try {
+                request.getSession().removeAttribute("sessionCacheData");
+                String result = userService.createUser(user);
+                return result;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return JacksonUtil.bean2Json(ResultFormat.build("0", "服务器维护，请联系站长", 1, "register", null));
+            }
+        }else{
+            return JacksonUtil.bean2Json(ResultFormat.build("0","验证码匹配失败", 0, "testnumber",null));
         }
+
     }
 }
