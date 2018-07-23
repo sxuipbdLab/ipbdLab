@@ -66,7 +66,7 @@ public class SearchApiController {
 
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
         json.put("dp",dp);
-        json.put("status",100);
+        json.put("status","1");
         return json;
     }
 
@@ -90,7 +90,7 @@ public class SearchApiController {
 
         String dataUrl = "http://172.21.201.131/search/pub/ApiDocinfo?fk=" + fk + "&dk=[{\"DCK\":\""+docAN+"@"+docPIN+"@"+docPD+"\",\"MID\":\""+mid+"\"}]";
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
-        json.put("status",100);
+        json.put("status","1");
         return json;
     }
 
@@ -114,9 +114,9 @@ public class SearchApiController {
             System.out.println(dockey_pdf);
             String url = "http://172.21.201.131/search/detail/getpdf?pdf=" + dockey_pdf;
             //String url = "http://172.21.201.131/search/pub/ApiGetfile?un=103&dk=" + dockey_pdf;
-            return JacksonUtil.bean2Json(ResultFormat.build("100","获取pdf链接成功",1,"pdf",url));
+            return JacksonUtil.bean2Json(ResultFormat.build("1","获取pdf链接成功",1,"pdf",url));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("101","获取pdf链接失败",1,"footprint",null));
+        return JacksonUtil.bean2Json(ResultFormat.build("0","获取pdf链接失败",1,"footprint",null));
     }
 
     /**

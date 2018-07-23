@@ -48,10 +48,10 @@ public class RoleController {
             role = roleService.getAllRole();
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","返回数据失败",1,"role",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回数据失败",1,"role",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "返回数据成功", 0, "role", role));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "返回数据成功", 0, "role", role));
     }
 
     // 可以匹配多个value,produces属性避免乱码
@@ -67,9 +67,9 @@ public class RoleController {
             role = roleService.getRoleById(rId);
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","返回数据失败",1,"role",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回数据失败",1,"role",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "返回数据成功", 0, "role", role));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "返回数据成功", 0, "role", role));
     }
 
     // 可以匹配多个value,produces属性避免乱码
@@ -97,7 +97,7 @@ public class RoleController {
             roleService.deleteRoleById(roleId);
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "删除失败",1 , "role", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "删除失败",1 , "role", null));
         }
         List<Role> role;
         try{
@@ -105,9 +105,9 @@ public class RoleController {
             role = roleService.getAllRole();
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","删除成功返回角色所有信息时失败",1,"role",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除成功返回角色所有信息时失败",1,"role",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "删除成功返回角色所有信息时成功", 0, "role", role));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "删除成功返回角色所有信息时成功", 0, "role", role));
     }
 
     // 可以匹配多个value,produces属性避免乱码
@@ -127,7 +127,7 @@ public class RoleController {
             roleService.insertRole(role);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "插入角色信息失败",1 , "role", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "插入角色信息失败",1 , "role", null));
         }
         try{
             if(index1 == i1){
@@ -147,7 +147,7 @@ public class RoleController {
             }
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "分配角色检索权限时失败",1 , "role", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "分配角色检索权限时失败",1 , "role", null));
         }
         List<Role> rolel;
         try{
@@ -155,10 +155,10 @@ public class RoleController {
             rolel = roleService.getAllRole();
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","添加角色成功返回所有信息时失败",1,"role",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","添加角色成功返回所有信息时失败",1,"role",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "添加角色成功返回所有信息时成功", 0, "role", rolel));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "添加角色成功返回所有信息时成功", 0, "role", rolel));
     }
 
     @RequestMapping(value = "/roles/update",
@@ -180,7 +180,7 @@ public class RoleController {
             roleService.updateRole(role);
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "更新角色信息出错", 1, "role", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "更新角色信息出错", 1, "role", null));
         }
         try{
             if(index1 == i1){
@@ -197,7 +197,7 @@ public class RoleController {
             }
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "更新检索权限出错", 1, "role", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "更新检索权限出错", 1, "role", null));
         }
         List<Role> roleArr;
         try{
@@ -205,9 +205,9 @@ public class RoleController {
             roleArr = roleService.getAllRole();
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "更新角色成功返回数据出错", 1, "role", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "更新角色成功返回数据出错", 1, "role", null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        return JacksonUtil.bean2Json(ResultFormat.build("100", "更新角色成功返回数据成功", 0, "role", roleArr));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "更新角色成功返回数据成功", 0, "role", roleArr));
     }
 }

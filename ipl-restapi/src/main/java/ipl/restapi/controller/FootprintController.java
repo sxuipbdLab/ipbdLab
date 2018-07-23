@@ -38,7 +38,8 @@ public class FootprintController {
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public Object getAllFootprint(HttpServletRequest request){
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","返回数据失败,未登录",1,"collect",null));
         }
@@ -56,7 +57,8 @@ public class FootprintController {
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public Object insertFootprintByuserId(HttpServletRequest request,@RequestParam(value = "searchContent") String searchContent) {
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId == null) {
             return JacksonUtil.bean2Json(ResultFormat.build("0", "返回收藏失败,未登录", 1, "collect", null));
         }
@@ -106,7 +108,8 @@ public class FootprintController {
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public Object delAllFootprintByuserId(HttpServletRequest request){
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","清除足迹失败,未登录",1,"collect",null));
         }
@@ -134,7 +137,8 @@ public class FootprintController {
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public Object delFootprintByContent(HttpServletRequest request,@RequestParam(value = "searchContent") String searchContent){
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","删除单项足迹失败,未登录",1,"collect",null));
         }
