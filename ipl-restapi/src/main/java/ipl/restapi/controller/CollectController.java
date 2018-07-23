@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -32,28 +34,35 @@ public class CollectController {
     private CollectService collectService;
 
     // 可以匹配多个value,produces属性避免乱码
-    @RequestMapping(value = "/collects/{userId}", method = {GET,POST},
+    @RequestMapping(value = "/collects/userId", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
-    public Object getALLCollect(@PathVariable Long userId) {
+    public Object getALLCollect(HttpServletRequest request, HttpServletResponse response) {
         //返回所有角色信息
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回收藏失败,未登录",1,"collect",null));
+        }
         List<Collect> collect;
         try{
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","返回收藏信息失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回收藏信息失败",1,"collect",null));
         }
         //将角色信息变为JSON格式赋值给roleJson
-        return JacksonUtil.bean2Json(ResultFormat.build("100","返回收藏信息成功",0,"collect",collect));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","返回收藏信息成功",0,"collect",collect));
     }
 
-    @RequestMapping(value = "/collects/add/{userId}", method = {GET, POST},
+    @RequestMapping(value = "/collects/add/userId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object insertByUserId(@PathVariable Long userId, @RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description) {
-
+    public Object insertByUserId(@RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description,HttpServletRequest request) {
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","添加收藏失败,未登录",1,"collect",null));
+        }
         Date collTime = new Date();
         Collect coll = new Collect();
         coll.setUserId(userId);
@@ -64,22 +73,26 @@ public class CollectController {
             collectService.insertByuserId(coll);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","添加收藏失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","添加收藏失败",1,"collect",null));
         }
         List<Collect> collect;
         try{
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","添加收藏成功返回信息失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","添加收藏成功返回信息失败",1,"collect",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100","添加收藏成功返回信息成功",0,"collect",collect));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","添加收藏成功返回信息成功",0,"collect",collect));
     }
 
-    @RequestMapping(value = "/collects/update/{userId}", method = {GET, POST},
+    @RequestMapping(value = "/collects/update/userId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object updateByUserIdAndDocId(@PathVariable Long userId,@RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description) {
+    public Object updateByUserIdAndDocId(HttpServletRequest request,@RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description) {
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","更新收藏失败,未登录",1,"collect",null));
+        }
         Date collTime = new Date();
         Collect coll = new Collect();
         coll.setUserId(userId);
@@ -91,7 +104,7 @@ public class CollectController {
             collectService.updateByUserIdAndDocId(coll);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","更新收藏失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","更新收藏失败",1,"collect",null));
         }
 
         List<Collect> collect;
@@ -99,16 +112,19 @@ public class CollectController {
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","更新收藏成功返回信息失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","更新收藏成功返回信息失败",1,"collect",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100","更新收藏成功返回信息成功",0,"collect",collect));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","更新收藏成功返回信息成功",0,"collect",collect));
     }
 
-    @RequestMapping(value = "/collects/delete/{userId}/{docId}", method = {GET, POST},
+    @RequestMapping(value = "/collects/delete/userId/{docId}", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object delByUserIdAndDocId(@PathVariable Long userId,@PathVariable Long docId){
-
+    public Object delByUserIdAndDocId(HttpServletRequest request,@PathVariable Long docId){
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除收藏信息失败,未登录",1,"collect",null));
+        }
         Collect coll = new Collect();
         coll.setUserId(userId);
         coll.setDocId(docId);
@@ -117,7 +133,7 @@ public class CollectController {
             collectService.delByPK(coll);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","删除收藏信息失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除收藏信息失败",1,"collect",null));
         }
 
         List<Collect> collect;
@@ -125,9 +141,9 @@ public class CollectController {
             collect = collectService.getAllCollect(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","删除收藏信息成功返回信息失败",1,"collect",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除收藏信息成功返回信息失败",1,"collect",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100","删除收藏信息成功返回信息成功",0,"collect",collect));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","删除收藏信息成功返回信息成功",0,"collect",collect));
     }
 
 }

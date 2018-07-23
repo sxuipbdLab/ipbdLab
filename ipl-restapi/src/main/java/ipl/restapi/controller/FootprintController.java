@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,25 +34,32 @@ public class FootprintController {
     @Autowired
     private FootprintService footprintService;
 
-    @RequestMapping(value = "/footprint/{userId}", method = {GET,POST},
+    @RequestMapping(value = "/footprint/userId", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object getAllFootprint(@PathVariable Long userId){
-
+    public Object getAllFootprint(HttpServletRequest request){
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回数据失败,未登录",1,"collect",null));
+        }
         List<Footprint> footprint;
         try{
             footprint = footprintService.getAllFootprint(userId);
         }catch(Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","返回数据失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","返回数据失败",1,"footprint",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100","返回数据成功",0,"footprint",footprint));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","返回数据成功",0,"footprint",footprint));
     }
 
-    @RequestMapping(value = "/footprint/insertBy{userId}", method = {GET, POST},
+    @RequestMapping(value = "/footprint/insertByuserId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object insertFootprintByuserId(@PathVariable Long userId,@RequestParam(value = "searchContent") String searchContent){
+    public Object insertFootprintByuserId(HttpServletRequest request,@RequestParam(value = "searchContent") String searchContent) {
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId == null) {
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "返回收藏失败,未登录", 1, "collect", null));
+        }
         Date searchTime = new Date();
 
         Footprint footprint = new Footprint();
@@ -59,14 +67,14 @@ public class FootprintController {
         footprint.setUserId(userId);
         footprint.setSearchTime(searchTime);
 
-        try{
-            if(10 > footprintService.getFootprintcount(userId)){
+        try {
+            if (10 > footprintService.getFootprintcount(userId)) {
                 try {
                     footprintService.insertFootprintByUserId(footprint);
                 } catch (Exception e) {
                     footprintService.updateByPK(footprint);
                 }
-            }else{
+            } else {
                 Footprint footprint2 = new Footprint();
                 footprint2.setSearchTime(footprintService.getMinTime(userId));
                 footprint2.setUserId(userId);
@@ -77,28 +85,31 @@ public class FootprintController {
                     footprintService.updateByPK(footprint);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","添加足迹失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "添加足迹失败", 1, "footprint", null));
         }
 
 
         List<Footprint> footprints;
-        try{
+        try {
             footprints = footprintService.getAllFootprint(userId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","添加足迹成功返回数据失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "添加足迹成功返回数据失败", 1, "footprint", null));
         }
         String data = JacksonUtil.bean2Json(footprints);
-        return JacksonUtil.bean2Json(ResultFormat.build("100","添加足迹成功返回数据成功",0,"footprint",data));
+        return JacksonUtil.bean2Json(ResultFormat.build("1", "添加足迹成功返回数据成功", 0, "footprint", data));
     }
 
-    @RequestMapping(value = "/footprint/delAllBy{userId}", method = {GET, POST},
+    @RequestMapping(value = "/footprint/delAllByuserId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object delAllFootprintByuserId(@PathVariable Long userId){
-
+    public Object delAllFootprintByuserId(HttpServletRequest request){
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","清除足迹失败,未登录",1,"collect",null));
+        }
         FootprintKey footprintKey = new FootprintKey();
         footprintKey.setUserId(userId);
 
@@ -106,7 +117,7 @@ public class FootprintController {
             footprintService.delAllByUserId(footprintKey);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","清除足迹失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","清除足迹失败",1,"footprint",null));
         }
 
         List<Footprint> footprints;
@@ -114,16 +125,19 @@ public class FootprintController {
             footprints = footprintService.getAllFootprint(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","清除足迹成功返回信息失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","清除足迹成功返回信息失败",1,"footprint",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100","清除足迹成功返回信息成功",0,"footprint",footprints));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","清除足迹成功返回信息成功",0,"footprint",footprints));
     }
 
-    @RequestMapping(value = "/footprint/delBy{userId}", method = {GET, POST},
+    @RequestMapping(value = "/footprint/delByuserId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object delFootprintByContent(@PathVariable Long userId,@RequestParam(value = "searchContent") String searchContent){
-
+    public Object delFootprintByContent(HttpServletRequest request,@RequestParam(value = "searchContent") String searchContent){
+        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        if (userId==null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除单项足迹失败,未登录",1,"collect",null));
+        }
         FootprintKey footprintKey = new FootprintKey();
         footprintKey.setUserId(userId);
         footprintKey.setSearchContent(searchContent);
@@ -132,15 +146,15 @@ public class FootprintController {
             footprintService.delByUserIdAndContent(footprintKey);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","删除单项足迹失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除单项足迹失败",1,"footprint",null));
         }
         List<Footprint> footprints;
         try{
             footprints = footprintService.getAllFootprint(userId);
         }catch (Exception e){
             e.printStackTrace();
-            return JacksonUtil.bean2Json(ResultFormat.build("101","删除单项足迹成功返回数据失败",1,"footprint",null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0","删除单项足迹成功返回数据失败",1,"footprint",null));
         }
-        return JacksonUtil.bean2Json(ResultFormat.build("100","删除单项足迹成功返回数据成功",0,"footprint",footprints));
+        return JacksonUtil.bean2Json(ResultFormat.build("1","删除单项足迹成功返回数据成功",0,"footprint",footprints));
     }
 }
