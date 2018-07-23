@@ -32,7 +32,7 @@ public class UserValidatController {
     @RequestMapping(value = "/checkinfo", produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}, method = RequestMethod.GET)
     @ResponseBody
     public String checkData(@RequestParam(value = "checkvalue") String param, @RequestParam(value = "type") Integer type) {
-// @RequestParam 是从request里面拿取值，而 @PathVariable 是从一个URI模板里面来填充
+    // @RequestParam 是从request里面拿取值，而 @PathVariable 是从一个URI模板里面来填充
         String result = null;
 
         //参数有效性校验

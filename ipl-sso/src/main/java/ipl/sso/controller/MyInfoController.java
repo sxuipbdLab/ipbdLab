@@ -46,7 +46,6 @@ public class MyInfoController {
         }
         // 有id值，转为long型到数据库查询
         long id = Long.parseLong(String.valueOf(session.getAttribute("sessionid")));
-        System.out.println("------------到这--------");
         if (id <= 10) {
             LOGGER.warn("id：{}不存在,用户虚假cookie请求“我的信息”，已拦截。", id);
             return JacksonUtil.bean2Json(ResultFormat.build("101", "用户未登录,数据库中没有对应id的用户", 1, "myinfo", null));
