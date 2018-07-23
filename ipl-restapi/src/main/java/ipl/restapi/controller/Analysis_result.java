@@ -52,7 +52,6 @@ public class Analysis_result{
 
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
         json.put("status",100);
-        json.put("dp",dp);
         return json;
     }
     //这个接口用来做分析统计，由用户触发，需要登录
@@ -77,7 +76,6 @@ public class Analysis_result{
 
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
         json.put("status",100);
-        json.put("dp",dp);
         return json;
     }
 }
