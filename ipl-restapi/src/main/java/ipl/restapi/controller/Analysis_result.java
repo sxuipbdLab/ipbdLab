@@ -51,7 +51,8 @@ public class Analysis_result{
         String dataUrl = "http://172.21.201.131/search/pub/ApiAnalyse?sdf0=" + field + "&dp=" + dp + "&pn=" + pn + "&q=" + searchStr;
 
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
-        json.put("status",100);
+        json.put("status",1);
+        json.put("dp",dp);
         return json;
     }
     //这个接口用来做分析统计，由用户触发，需要登录
@@ -75,7 +76,8 @@ public class Analysis_result{
         String dataUrl = "http://172.21.201.131/search/pub/ApiAnalyse?sdf0=" + field + "&dp=" + dp + "&pn=" + pn + "&q=" + searchStr;
 
         JSONObject json = JSONObject.parseObject(analog_landing.ConnectTheNet(dataUrl));
-        json.put("status",100);
+        json.put("status",1);
+        json.put("dp",dp);
         return json;
     }
 }
