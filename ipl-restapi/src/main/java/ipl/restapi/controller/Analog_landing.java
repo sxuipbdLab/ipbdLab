@@ -16,6 +16,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ * 模拟登陆
+ * 模拟执行shell
  * @author 原之安
  * @date 2018/5/28 21:17
  */
@@ -68,6 +70,15 @@ public class Analog_landing {
         return sb.toString();
     }
 
+    /**
+     * 模拟执行shell
+     * @param host
+     * @param password
+     * @param command
+     * @return
+     * @throws JSchException
+     * @throws IOException
+     */
     public static String exeCommand(String host, String password, String command) throws JSchException, IOException {
 
         JSch jsch = new JSch();

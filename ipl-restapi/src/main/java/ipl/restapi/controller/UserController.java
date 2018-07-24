@@ -15,7 +15,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * <p>Descirption:</p>
+ * <p> 用户信息管理 </p>
  *
  * @author 王海
  * @version V1.0
@@ -30,6 +30,12 @@ public class UserController {
     private UsersService usersService;
 
     // 可以匹配多个value,produces属性避免乱码
+
+    /**
+     * 管理员 通过制定userid 获取用户信息
+     * @param userId
+     * @return
+     */
     @RequestMapping(value = "/users/{userId}", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
@@ -41,6 +47,10 @@ public class UserController {
         return userJson;
     }
 
+    /**
+     * 管理员获取所有用户信息
+     * @return
+     */
     @RequestMapping(value = "/users/all", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody

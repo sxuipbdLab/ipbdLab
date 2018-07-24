@@ -110,6 +110,12 @@
             <artifactId>jsch</artifactId>
             <version>0.1.53</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.glassfish/javax.mail -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>10.0-b28</version>
+        </dependency>
 
     </dependencies>
 

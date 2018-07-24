@@ -18,7 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * <p> Desciption</P>
+ * <p> 角色信息管理 </P>
  *
  * @author 原之安
  * @version V1.0
@@ -36,7 +36,10 @@ public class RoleController {
     @Autowired
     private RoleSearchService roleSearchService;
 
-    // 可以匹配多个value,produces属性避免乱码
+    /**
+     * 获取所有角色信息
+     * @return
+     */
     @RequestMapping(value = "/roles/all", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
@@ -54,7 +57,11 @@ public class RoleController {
         return JacksonUtil.bean2Json(ResultFormat.build("100", "返回数据成功", 0, "role", role));
     }
 
-    // 可以匹配多个value,produces属性避免乱码
+    /**
+     * 获取制定ID的角色信息
+     * @param roleId
+     * @return
+     */
     @RequestMapping(value = "/roles", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
@@ -72,7 +79,11 @@ public class RoleController {
         return JacksonUtil.bean2Json(ResultFormat.build("100", "返回数据成功", 0, "role", role));
     }
 
-    // 可以匹配多个value,produces属性避免乱码
+    /**
+     * 根据角色ID删除角色信息
+     * @param roleId
+     * @return
+     */
     @RequestMapping(value = "/roles/delete/{roleId}", method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
@@ -110,7 +121,16 @@ public class RoleController {
         return JacksonUtil.bean2Json(ResultFormat.build("100", "删除成功返回角色所有信息时成功", 0, "role", role));
     }
 
-    // 可以匹配多个value,produces属性避免乱码
+    /**
+     * 添加角色信息
+     * @param roleId 角色ID
+     * @param roleName 角色名
+     * @param roleSearchCount 角色检索次数
+     * @param index1
+     * @param index2
+     * @param index3
+     * @return
+     */
     @RequestMapping(value = "/roles/add",
             method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
@@ -161,6 +181,16 @@ public class RoleController {
         return JacksonUtil.bean2Json(ResultFormat.build("100", "添加角色成功返回所有信息时成功", 0, "role", rolel));
     }
 
+    /**
+     * 更新角色信息
+     * @param roleId
+     * @param roleName
+     * @param roleSearchCount
+     * @param index1
+     * @param index2
+     * @param index3
+     * @return
+     */
     @RequestMapping(value = "/roles/update",
             method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})

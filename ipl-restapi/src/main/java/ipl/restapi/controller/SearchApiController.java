@@ -27,7 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * <p> Desciption</P>
+ * <p> 检索API (东方灵顿) </P>
  *
  * @author 原之安
  * @version V1.0
@@ -95,6 +95,15 @@ public class SearchApiController {
     }
 
 
+    /**
+     * 获取pdf链接信息
+     * @param docPIN
+     * @param docAN
+     * @param docPD
+     * @return
+     * @throws IOException
+     * @throws JSchException
+     */
     @RequestMapping(value = "/getPDF",method = {GET,POST},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -151,6 +160,11 @@ public class SearchApiController {
         return re_for_html(resp2.getBody());
     }
 
+    /**
+     * 对爬虫得来的网页信息进行关键元素提取
+     * @param webSource
+     * @return
+     */
     public String re_for_html(String webSource){
         String regex = "<li>\\s+<div[^n][\\s\\S]+?</li>";
         Pattern pattern = Pattern.compile(regex);
