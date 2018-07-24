@@ -155,17 +155,10 @@ public class UserLoginRegistController {
             }
             //查找成功，获得用户对象
             UserInfo user = list.get(0);
-            //重置密码
-            user.setPassword(newpassword);
             //设置本次登录时间
             user.setLoginTime(new Date());
-            //设置上次登录时间
-            user.setLastLoginTime(new Date());
-            //设置登录次数
-            user.setLoginCount(1);
-            user.setIdentity((short)1);
             // md5加密
-            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            user.setPassword(DigestUtils.md5DigestAsHex(newpassword.getBytes()));
             try {
                 userInfoMapper.updateByPrimaryKeySelective(user);
             } catch (Exception e) {

@@ -25,6 +25,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 @Controller
@@ -42,12 +44,14 @@ public class EmailSendController {
     public String SendJavaMail(@RequestParam(value = "email") String email,
                                HttpServletRequest request){
 
-        String number = null;
+        String number = "";
         try {
             for (int i = 0; i < 6; i++) {
                 number = number + (int) (Math.random() * 10);
             }
             request.getSession().setAttribute("sessionCacheData", number);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            System.out.println("[" + df.format(new Date()) + "]  <" + email + "><" + number + ">");
             Properties props = new Properties();
             //指定邮件的发送服务器地址,改用qq
             props.put("mail.smtp.host", "smtp.qq.com");
