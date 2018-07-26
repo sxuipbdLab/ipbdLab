@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="ipl.manager.pojo.Collect" >
     <id column="user_id" property="userId" jdbcType="BIGINT" />
     <id column="doc_id" property="docId" jdbcType="BIGINT" />
-    <id column="mid" property="mid" jdbcType="BIGINT" />
     <result column="coll_time" property="collTime" jdbcType="TIMESTAMP" />
     <result column="description" property="description" jdbcType="VARCHAR" />
   </resultMap>
@@ -102,9 +101,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="ipl.manager.pojo.Collect" >
-    insert into collect (user_id, doc_id,mid, coll_time,
+    insert into collect (user_id, doc_id, coll_time,
       description)
-    values (#{userId,jdbcType=BIGINT}, #{docId,jdbcType=BIGINT}, #{mid,jdbcType=BIGINT},#{collTime,jdbcType=TIMESTAMP},
+    values (#{userId,jdbcType=BIGINT}, #{docId,jdbcType=BIGINT}, #{collTime,jdbcType=TIMESTAMP},
       #{description,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="ipl.manager.pojo.Collect" >
@@ -193,7 +192,6 @@
       description = #{description,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=BIGINT}
       and doc_id = #{docId,jdbcType=BIGINT}
-      and mid = #{mid,jdbcType=BIGINT}
   </update>
   <select id="getAllCollectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     SELECT * FROM collect WHERE user_id = #{userId,jdbcType=BIGINT} ORDER BY coll_time desc;
