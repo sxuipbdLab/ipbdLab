@@ -28,6 +28,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 @Controller
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class EmailSendController {
@@ -59,11 +60,13 @@ public class EmailSendController {
             MimeMessage message = new MimeMessage(session);
 
             //设置发送者
-            Address fromAddress = new InternetAddress("649568285@qq.com");//邮件地址
-            message.setFrom(fromAddress);//设置发送的邮件地址
-            //设置接收者
-            Address toAddress = new InternetAddress(email);//要接收邮件的邮箱
-            message.setRecipient(RecipientType.TO, toAddress);//设置接收者的地址
+            Address fromAddress = new InternetAddress("649568285@qq.com");
+            //设置发送的邮件地址
+            message.setFrom(fromAddress);
+            //设置接收者  email为要接收邮件的邮箱
+            Address toAddress = new InternetAddress(email);
+            //设置接收者的地址
+            message.setRecipient(RecipientType.TO, toAddress);
 
             //设置邮件的主题
             message.setSubject("您的验证码");

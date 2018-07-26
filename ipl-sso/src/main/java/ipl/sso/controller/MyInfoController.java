@@ -42,23 +42,23 @@ public class MyInfoController {
         HttpSession session = request.getSession(true);
         // 如果session中没有id的值
         if (session.getAttribute("sessionid") == null) {
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "用户未登录", 1, "myinfo", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "用户未登录", 1, "myinfo", null));
         }
         // 有id值，转为long型到数据库查询
         long id = Long.parseLong(String.valueOf(session.getAttribute("sessionid")));
         if (id <= 10) {
             LOGGER.warn("id：{}不存在,用户虚假cookie请求“我的信息”，已拦截。", id);
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "用户未登录,数据库中没有对应id的用户", 1, "myinfo", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "用户未登录,数据库中没有对应id的用户", 1, "myinfo", null));
         }
         try {
             UserInfo user = myInfoService.getUserInfoById(id);
             user.setPassword("不可见");
             String dataString = JacksonUtil.bean2Json(user);
-            return JacksonUtil.bean2Json(ResultFormat.build("100", "获取用户信息成功", 0, "myinfo", dataString));
+            return JacksonUtil.bean2Json(ResultFormat.build("1", "获取用户信息成功", 0, "myinfo", dataString));
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info("用户,{}获取自己信息失败========{}", id, StackTraceToString.getStackTraceString(e));
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "获取用户信息失败，请联系站长", 1, "myinfo", null));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "获取用户信息失败，请联系站长", 1, "myinfo", null));
         }
     }
 }
