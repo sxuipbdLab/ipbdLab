@@ -40,7 +40,8 @@ public class CollectController {
     // 用于将请求URL中的模板变量映射到功能处理方法的参数上，即取出uri模板中的变量作为参数
     public Object getALLCollect(HttpServletRequest request, HttpServletResponse response) {
         //返回所有角色信息
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","返回收藏失败,未登录",1,"collect",null));
         }
@@ -58,8 +59,9 @@ public class CollectController {
     @RequestMapping(value = "/collects/add/userId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object insertByUserId(@RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description,HttpServletRequest request) {
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+    public Object insertByUserId(@RequestParam(value = "docId") Long docId, @RequestParam(value = "mid") Long mid, @RequestParam(value = "description") String description,HttpServletRequest request) {
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","添加收藏失败,未登录",1,"collect",null));
         }
@@ -67,6 +69,7 @@ public class CollectController {
         Collect coll = new Collect();
         coll.setUserId(userId);
         coll.setDocId(docId);
+        coll.setmid(mid);
         coll.setCollTime(collTime);
         coll.setDescription(description);
         try{
@@ -88,8 +91,9 @@ public class CollectController {
     @RequestMapping(value = "/collects/update/userId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object updateByUserIdAndDocId(HttpServletRequest request,@RequestParam(value = "docId") Long docId, @RequestParam(value = "description") String description) {
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+    public Object updateByUserIdAndDocId(HttpServletRequest request,@RequestParam(value = "docId") Long docId,@RequestParam(value = "mid") Long mid, @RequestParam(value = "description") String description) {
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","更新收藏失败,未登录",1,"collect",null));
         }
@@ -97,6 +101,7 @@ public class CollectController {
         Collect coll = new Collect();
         coll.setUserId(userId);
         coll.setDocId(docId);
+        coll.setmid(mid);
         coll.setCollTime(collTime);
         coll.setDescription(description);
 
@@ -117,11 +122,12 @@ public class CollectController {
         return JacksonUtil.bean2Json(ResultFormat.build("1","更新收藏成功返回信息成功",0,"collect",collect));
     }
 
-    @RequestMapping(value = "/collects/delete/userId/{docId}", method = {GET, POST},
+    @RequestMapping(value = "/collects/delete/userId/docId", method = {GET, POST},
             produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
-    public Object delByUserIdAndDocId(HttpServletRequest request,@PathVariable Long docId){
-        Long userId = (Long) request.getSession().getAttribute("sessionid");
+    public Object delByUserIdAndDocId(HttpServletRequest request,@RequestParam("docId") Long docId){
+        SessionGet session = new SessionGet();
+        Long userId = session.getID(request);
         if (userId==null){
             return JacksonUtil.bean2Json(ResultFormat.build("0","删除收藏信息失败,未登录",1,"collect",null));
         }
