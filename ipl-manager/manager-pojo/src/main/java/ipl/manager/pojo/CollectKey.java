@@ -5,6 +5,12 @@ public class CollectKey {
 
     private Long docId;
 
+    private Long mid;
+
+    public Long getMid(){return mid;}
+
+    public void setMid(Long mid){this.mid = mid; }
+
     public Long getUserId() {
         return userId;
     }
