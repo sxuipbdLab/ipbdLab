@@ -29,6 +29,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @Controller
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class EmailSendController {
@@ -39,7 +42,8 @@ public class EmailSendController {
      * @throws MessagingException
      * @throws AddressException
      */
-    @RequestMapping(value = "/sendMail", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/sendMail", method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String SendJavaMail(@RequestParam(value = "email") String email,
                                HttpServletRequest request){
@@ -105,7 +109,8 @@ public class EmailSendController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/TestMail", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/TestMail", method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String TestJavaMail(@RequestParam(value ="number") String number,HttpServletRequest request){
 

@@ -1,5 +1,6 @@
 package ipl.restapi.controller;
 
+import ipl.common.utils.Get_Session;
 import ipl.common.utils.JacksonUtil;
 import ipl.common.utils.ResultFormat;
 import ipl.common.utils.StackTraceToString;
@@ -10,13 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * <p> 个人信息管理 </p>
@@ -42,31 +42,28 @@ public class MyInfoController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/myinfo", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/myinfo", method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String getMyInfo(HttpServletRequest request) {
-        // 得到session对象(若存在会话则返回该会话,否则新建一个会话————不用判空)
-        HttpSession session = request.getSession(true);
-        // 如果session中没有id的值
-        if (session.getAttribute("sessionid") == null) {
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "用户未登录", 1, "myinfo", null));
+        Get_Session getSession = new Get_Session();
+        Long userId = getSession.getID(request);
+        if (userId == null){
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "用户未登录", 1, "myinfo", null));
         }
-        // 有id值，转为long型到数据库查询
-        long id = Long.parseLong(String.valueOf(session.getAttribute("sessionid")));
-        if (id <= 10) {
-            LOGGER.warn("id：{}不存在,用户虚假cookie请求“我的信息”，已拦截。", id);
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "用户未登录,数据库中没有对应id的用户", 1, "myinfo", null));
+        if (userId <= 10) {
+            LOGGER.warn("id：{}不存在,用户虚假cookie请求“我的信息”，已拦截。", userId);
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "用户未登录,数据库中没有对应id的用户", 1, "myinfo", null));
         }
         try {
-
-            UserInfo user = myInfoService.getUserInfoById(id);
+            UserInfo user = myInfoService.getUserInfoById(userId);
             user.setPassword("不可见");
             String dataString = JacksonUtil.bean2Json(user);
-            return JacksonUtil.bean2Json(ResultFormat.build("100", "获取用户信息成功", 0, "myinfo", dataString));
+            return JacksonUtil.bean2Json(ResultFormat.build("1", "获取用户信息成功", 0, "myinfo", dataString));
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.info("用户,{}获取自己信息失败========{}", id, StackTraceToString.getStackTraceString(e));
-            return JacksonUtil.bean2Json(ResultFormat.build("101", "获取用户信息失败，请联系站长", 1, "myinfo", null));
+            LOGGER.info("用户,{}获取自己信息失败========{}", userId, StackTraceToString.getStackTraceString(e));
+            return JacksonUtil.bean2Json(ResultFormat.build("0", "获取用户信息失败，请联系站长", 1, "myinfo", null));
         }
     }
 }

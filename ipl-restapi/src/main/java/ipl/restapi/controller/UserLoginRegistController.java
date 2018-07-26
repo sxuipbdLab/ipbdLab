@@ -55,12 +55,14 @@ public class UserLoginRegistController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/login", method = POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/login", method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String userLogin(String email,
                             String password,
                             HttpServletRequest request,
                             HttpServletResponse response) {
+        System.out.println("email==" + email);
         try {
             String result = userService.userLogin(email, password,request, response);
             return result;
@@ -78,12 +80,12 @@ public class UserLoginRegistController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/register", method = POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/register", method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String createUser(UserInfo user,
                              @RequestParam(value = "number")String number,
                              HttpServletRequest request) {
-
         String sessionCacheData = (String) request.getSession().getAttribute("sessionCacheData");
         if (number.equals(sessionCacheData)){
             try {
@@ -133,7 +135,8 @@ public class UserLoginRegistController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/resetPassword", method = POST, produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
+    @RequestMapping(value = "/resetPassword", method = {GET,POST},
+            produces = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"})
     @ResponseBody
     public String resetPassword(@RequestParam("email") String email,
                                 @RequestParam("newpassword") String newpassword,
